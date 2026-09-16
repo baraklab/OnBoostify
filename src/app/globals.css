@@ -1,26 +1,281 @@
 @import "tailwindcss";
 
+/*
+ * OnBoostify design tokens.
+ * Light, premium, minimal. One accent color, used sparingly.
+ * Keep all color usage in components tied to these tokens —
+ * never hardcode hex values in component code.
+ */
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #14141a;
+
+  --card: #ffffff;
+  --card-foreground: #14141a;
+
+  --primary: #14141a;
+  --primary-foreground: #ffffff;
+
+  --secondary: #f4f4f2;
+  --secondary-foreground: #14141a;
+
+  --muted: #f6f6f4;
+  --muted-foreground: #6b6b66;
+
+  --border: #e5e5e0;
+  --input: #e5e5e0;
+  --ring: #ff5a1f;
+
+  --accent: #ff5a1f;
+  --accent-foreground: #ffffff;
+  --accent-soft: #fff1e9;
+
+  --success: #1a7f4b;
+  --success-foreground: #ffffff;
+  --success-soft: #eaf7f0;
+
+  --warning: #b5720a;
+  --warning-foreground: #ffffff;
+  --warning-soft: #fdf3e2;
+
+  --destructive: #c0362c;
+  --destructive-foreground: #ffffff;
+  --destructive-soft: #fbeceb;
+
+  /* Block colors: a small rotating palette used for feature/use-case
+     cards, blog category tags, and other multi-item grids so the page
+     reads as more than one accent color repeated everywhere. */
+  --block-violet-bg: #eef0ff;
+  --block-violet-fg: #4f46e5;
+  --block-sky-bg: #e0f2fe;
+  --block-sky-fg: #0284c7;
+  --block-emerald-bg: #e7f8f0;
+  --block-emerald-fg: #059669;
+  --block-rose-bg: #fce7f3;
+  --block-rose-fg: #db2777;
+  --block-amber-bg: #fef3e0;
+  --block-amber-fg: #d97706;
+  --block-purple-bg: #f5ebfd;
+  --block-purple-fg: #9333ea;
+
+  --radius: 0.5rem;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-soft: var(--accent-soft);
+
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-success-soft: var(--success-soft);
+
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning-soft: var(--warning-soft);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-destructive-soft: var(--destructive-soft);
+
+  --color-block-violet-bg: var(--block-violet-bg);
+  --color-block-violet-fg: var(--block-violet-fg);
+  --color-block-sky-bg: var(--block-sky-bg);
+  --color-block-sky-fg: var(--block-sky-fg);
+  --color-block-emerald-bg: var(--block-emerald-bg);
+  --color-block-emerald-fg: var(--block-emerald-fg);
+  --color-block-rose-bg: var(--block-rose-bg);
+  --color-block-rose-fg: var(--block-rose-fg);
+  --color-block-amber-bg: var(--block-amber-bg);
+  --color-block-amber-fg: var(--block-amber-fg);
+  --color-block-purple-bg: var(--block-purple-bg);
+  --color-block-purple-fg: var(--block-purple-fg);
+
+  --radius-sm: calc(var(--radius) - 0.2rem);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 0.25rem);
+  --radius-xl: calc(var(--radius) + 0.5rem);
+
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-geist);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--color-border);
+}
+
+html {
+  color-scheme: light;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  font-feature-settings:
+    "cv11" 1,
+    "ss01" 1;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+
+.font-heading {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+}
+
+.font-mono-tech {
+  font-family: var(--font-mono);
+  letter-spacing: -0.01em;
+}
+
+/* ---------- auth card flip ----------
+ * Sign in / sign up share one card and flip between faces instead of
+ * navigating to a separate page. Forgot-password rides the same flip,
+ * taking over the back face while sign-in stays on the front.
+ */
+.auth-flip {
+  perspective: 1800px;
+}
+.auth-flip-inner {
+  position: relative;
+  min-height: 560px;
+  transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+  transform-style: preserve-3d;
+}
+.auth-flip-inner[data-flipped="true"] {
+  transform: rotateY(180deg);
+}
+.auth-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.auth-face-back {
+  transform: rotateY(180deg);
+}
+.auth-face .auth-card {
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* Metadata / eyebrow text used above headings and on cards */
+.text-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted-foreground);
+}
+
+::selection {
+  background: var(--color-accent-soft);
+  color: var(--color-foreground);
+}
+
+/* Focus visibility, kept subtle but always present for accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+/* ---------- 404 page motion ---------- */
+@keyframes nf-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-3deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(3deg);
+  }
+}
+@keyframes nf-drift {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(6px, -10px);
+  }
+}
+@keyframes nf-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.8;
+  }
+}
+@keyframes nf-spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes nf-twinkle {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.nf-float {
+  animation: nf-float 4s ease-in-out infinite;
+}
+.nf-drift {
+  animation: nf-drift 6s ease-in-out infinite;
+}
+.nf-blob {
+  animation: nf-pulse 5s ease-in-out infinite;
+}
+.nf-spin-slow {
+  animation: nf-spin-slow 12s linear infinite;
+}
+.nf-star {
+  animation: nf-twinkle 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nf-float,
+  .nf-drift,
+  .nf-blob,
+  .nf-spin-slow,
+  .nf-star {
+    animation: none;
+  }
 }
