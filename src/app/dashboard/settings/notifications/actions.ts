@@ -1,7 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentUserId } from "@/lib/auth/session";
 import type { ActionState } from "@/lib/types/action-state";
 import type { NotificationPreferences } from "@/types/database";
 
@@ -9,11 +10,9 @@ export async function updateNotificationPreferences(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return { status: "error", error: "Not authenticated." };
+  const userId = await getCurrentUserId();
+  if (!userId) return { status: "error", error: "Not authenticated." };
+  const supabase = createAdminClient();
 
   const preferences: NotificationPreferences = {
     scheduled_post_published: formData.get("scheduled_post_published") === "on",
@@ -24,7 +23,7 @@ export async function updateNotificationPreferences(
   const { error } = await supabase
     .from("profiles")
     .update({ notification_preferences: preferences })
-    .eq("id", user.id);
+    .eq("id", userId);
 
   if (error) return { status: "error", error: "Could not save preferences." };
 

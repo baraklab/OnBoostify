@@ -1,18 +1,16 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { Composer } from "./composer";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentUserId } from "@/lib/auth/session";
 import type { PlatformIdDb } from "@/types/database";
 
 export const metadata: Metadata = { title: "Create" };
 export const dynamic = "force-dynamic";
 
 export default async function CreatePage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  const userId = user!.id;
+  const supabase = createAdminClient();
+  const userId = (await getCurrentUserId())!;
 
   const [{ data: contentProfiles }, { data: accountRows }, { count: aiProviderCount }] = await Promise.all([
     supabase.from("content_profiles").select("id, name").eq("user_id", userId).order("created_at"),

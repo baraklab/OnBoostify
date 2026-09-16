@@ -1,18 +1,16 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { PostsTable, type PostRow } from "./posts-table";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentUserId } from "@/lib/auth/session";
 import type { PlatformIdDb } from "@/types/database";
 
 export const metadata: Metadata = { title: "Posts" };
 export const dynamic = "force-dynamic";
 
 export default async function PostsPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  const userId = user!.id;
+  const supabase = createAdminClient();
+  const userId = (await getCurrentUserId())!;
 
   const { data: rows } = await supabase
     .from("generated_posts")

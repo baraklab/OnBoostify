@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { contactSchema } from "@/lib/validation/contact";
 
 export interface ContactFormState {
@@ -22,7 +22,7 @@ export async function submitContactForm(
     return { status: "error", error: parsed.error.issues[0]?.message ?? "Invalid input." };
   }
 
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { error } = await supabase.from("contact_messages").insert(parsed.data);
 
   if (error) {

@@ -1,7 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentUserId } from "@/lib/auth/session";
 import { contentProfileSchema } from "@/lib/validation/settings";
 import type { ActionState } from "@/lib/types/action-state";
 
@@ -32,11 +33,9 @@ export async function saveContentProfile(
     return { status: "error", error: parsed.error.issues[0]?.message };
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return { status: "error", error: "Not authenticated." };
+  const userId = await getCurrentUserId();
+  if (!userId) return { status: "error", error: "Not authenticated." };
+  const supabase = createAdminClient();
 
   const payload = {
     name: parsed.data.name,
@@ -54,12 +53,12 @@ export async function saveContentProfile(
   };
 
   if (parsed.data.isDefault) {
-    await supabase.from("content_profiles").update({ is_default: false }).eq("user_id", user.id);
+    await supabase.from("content_profiles").update({ is_default: false }).eq("user_id", userId);
   }
 
   const { error } = profileId
-    ? await supabase.from("content_profiles").update(payload).eq("id", profileId).eq("user_id", user.id)
-    : await supabase.from("content_profiles").insert({ ...payload, user_id: user.id });
+    ? await supabase.from("content_profiles").update(payload).eq("id", profileId).eq("user_id", userId)
+    : await supabase.from("content_profiles").insert({ ...payload, user_id: userId });
 
   if (error) return { status: "error", error: "Could not save this profile." };
 
@@ -68,29 +67,25 @@ export async function saveContentProfile(
 }
 
 export async function deleteContentProfile(profileId: string) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return;
+  const userId = await getCurrentUserId();
+  if (!userId) return;
+  const supabase = createAdminClient();
 
-  await supabase.from("content_profiles").delete().eq("id", profileId).eq("user_id", user.id);
+  await supabase.from("content_profiles").delete().eq("id", profileId).eq("user_id", userId);
   revalidatePath("/dashboard/settings/content-preferences");
 }
 
 export async function setDefaultContentProfile(profileId: string) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return;
+  const userId = await getCurrentUserId();
+  if (!userId) return;
+  const supabase = createAdminClient();
 
-  await supabase.from("content_profiles").update({ is_default: false }).eq("user_id", user.id);
+  await supabase.from("content_profiles").update({ is_default: false }).eq("user_id", userId);
   await supabase
     .from("content_profiles")
     .update({ is_default: true })
     .eq("id", profileId)
-    .eq("user_id", user.id);
+    .eq("user_id", userId);
 
   revalidatePath("/dashboard/settings/content-preferences");
 }

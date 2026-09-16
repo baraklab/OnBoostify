@@ -129,7 +129,12 @@ html {
 }
 
 body {
-  background: var(--color-background);
+  background:
+    radial-gradient(1100px 620px at 12% -12%, var(--block-violet-bg) 0%, transparent 62%),
+    radial-gradient(900px 520px at 88% -4%, var(--block-sky-bg) 0%, transparent 58%),
+    radial-gradient(700px 500px at 70% 108%, var(--block-rose-bg) 0%, transparent 60%),
+    linear-gradient(180deg, var(--color-background) 0%, var(--color-muted) 100%);
+  background-attachment: fixed;
   color: var(--color-foreground);
   font-family: var(--font-sans);
   font-feature-settings:

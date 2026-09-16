@@ -4,7 +4,7 @@ import { Users, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { SectionHeading } from "@/components/marketing/section-heading";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { pageMetadata } from "@/lib/seo/metadata";
 import { siteConfig } from "@/lib/seo/config";
 import { getBlockColorForLabel } from "@/lib/block-colors";
@@ -25,7 +25,7 @@ const categoryLabels: Record<string, string> = {
 };
 
 export default async function NetworkPage() {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { data: profiles } = await supabase
     .from("network_profiles")
     .select("id, display_name, category, platforms, audience_size, bio")

@@ -127,15 +127,21 @@ export default function HomePage() {
               </dl>
             </div>
 
-            <div className="overflow-hidden rounded-lg border border-border">
-              <Image
-                src="/hero-workflow.png"
-                alt="One post fans out to X, LinkedIn, Medium, and Substack, then rolls up into more reach"
-                width={1235}
-                height={748}
-                priority
-                className="h-auto w-full"
+            <div className="relative">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 -z-10 rounded-full bg-blue-400/25 blur-3xl"
               />
+              <div className="overflow-hidden rounded-lg border border-border">
+                <Image
+                  src="/hero-workflow.png"
+                  alt="One post fans out to X, LinkedIn, Medium, and Substack, then rolls up into more reach"
+                  width={1355}
+                  height={1161}
+                  priority
+                  className="h-auto w-full"
+                />
+              </div>
             </div>
           </div>
         </div>

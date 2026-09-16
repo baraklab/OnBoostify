@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ProviderCard } from "./provider-card";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentUserId } from "@/lib/auth/session";
 import { decryptSecret, maskSecret } from "@/lib/crypto";
 import { aiProviderList } from "@/lib/ai/registry";
 import type { AIProviderIdDb } from "@/types/database";
@@ -9,15 +10,13 @@ export const metadata: Metadata = { title: "AI providers" };
 export const dynamic = "force-dynamic";
 
 export default async function AIProvidersPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const supabase = createAdminClient();
+  const userId = (await getCurrentUserId())!;
 
   const { data: rows } = await supabase
     .from("ai_providers")
     .select("id, provider, encrypted_api_key, default_model, is_default, last_test_status")
-    .eq("user_id", user!.id);
+    .eq("user_id", userId);
 
   const byProvider = new Map(
     (rows ?? []).map((row) => [

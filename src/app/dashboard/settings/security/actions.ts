@@ -1,8 +1,9 @@
 "use server";
 
+import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentUserId, clearSessionCookies } from "@/lib/auth/session";
 import { changePasswordSchema } from "@/lib/validation/security";
 import type { ActionState } from "@/lib/types/action-state";
 
@@ -15,22 +16,25 @@ export async function changePassword(_prev: ActionState, formData: FormData): Pr
     return { status: "error", error: parsed.error.issues[0]?.message };
   }
 
-  const supabase = await createClient();
-  const { error } = await supabase.auth.updateUser({ password: parsed.data.newPassword });
+  const userId = await getCurrentUserId();
+  if (!userId) return { status: "error", error: "Not authenticated." };
 
-  if (error) return { status: "error", error: error.message };
+  const supabase = createAdminClient();
+  const { error } = await supabase
+    .from("users")
+    .update({ password_hash: bcrypt.hashSync(parsed.data.newPassword, 10) })
+    .eq("id", userId);
+
+  if (error) return { status: "error", error: "Could not update password." };
   return { status: "success" };
 }
 
 export async function deleteAccount() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
+  const userId = await getCurrentUserId();
+  if (!userId) redirect("/login");
 
-  const admin = createAdminClient();
-  await admin.auth.admin.deleteUser(user.id);
-  await supabase.auth.signOut();
+  const supabase = createAdminClient();
+  await supabase.from("users").delete().eq("id", userId);
+  await clearSessionCookies();
   redirect("/");
 }

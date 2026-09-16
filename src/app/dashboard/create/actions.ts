@@ -1,7 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentUserId } from "@/lib/auth/session";
 import { decryptSecret } from "@/lib/crypto";
 import { generateContentSchema, refineActionSchema } from "@/lib/validation/compose";
 import { generateForPlatform, refinePost, defaultContentProfile, type ContentProfile } from "@/lib/ai/transform";
@@ -25,7 +26,7 @@ export interface GenerateContentState {
 }
 
 async function loadDefaultAIProvider(userId: string) {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { data } = await supabase
     .from("ai_providers")
     .select("provider, encrypted_api_key, default_model")
@@ -42,7 +43,7 @@ async function loadDefaultAIProvider(userId: string) {
 }
 
 async function loadContentProfile(userId: string, profileId?: string): Promise<ContentProfile> {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const query = supabase.from("content_profiles").select("*").eq("user_id", userId);
 
   const { data } = profileId
@@ -82,13 +83,11 @@ export async function generateContent(
     return { status: "error", error: parsed.error.issues[0]?.message ?? "Invalid input." };
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return { status: "error", error: "Not authenticated." };
+  const userId = await getCurrentUserId();
+  if (!userId) return { status: "error", error: "Not authenticated." };
+  const supabase = createAdminClient();
 
-  const aiProvider = await loadDefaultAIProvider(user.id);
+  const aiProvider = await loadDefaultAIProvider(userId);
   if (!aiProvider) {
     return {
       status: "error",
@@ -96,7 +95,7 @@ export async function generateContent(
     };
   }
 
-  const profile = await loadContentProfile(user.id, parsed.data.contentProfileId || undefined);
+  const profile = await loadContentProfile(userId, parsed.data.contentProfileId || undefined);
 
   const trackedLink = parsed.data.linkUrl
     ? buildTrackedUrl(parsed.data.linkUrl, {
@@ -109,7 +108,7 @@ export async function generateContent(
   const { data: sourcePost, error: sourceError } = await supabase
     .from("source_posts")
     .insert({
-      user_id: user.id,
+      user_id: userId,
       input_type: parsed.data.inputType,
       title: parsed.data.title || null,
       raw_content: parsed.data.rawContent,
@@ -139,7 +138,7 @@ export async function generateContent(
       const { data: generated, error: genError } = await supabase
         .from("generated_posts")
         .insert({
-          user_id: user.id,
+          user_id: userId,
           source_post_id: sourcePost.id,
           platform,
           content,
@@ -155,7 +154,7 @@ export async function generateContent(
 
       if (trackedLink && parsed.data.linkUrl) {
         await supabase.from("backlinks").insert({
-          user_id: user.id,
+          user_id: userId,
           generated_post_id: generated.id,
           canonical_url: parsed.data.linkUrl,
           destination_url: trackedLink,
@@ -190,21 +189,19 @@ export async function refineGeneratedPost(postId: string, action: string): Promi
   const parsedAction = refineActionSchema.safeParse(action);
   if (!parsedAction.success) return { status: "error", error: "Unknown action." };
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return { status: "error", error: "Not authenticated." };
+  const userId = await getCurrentUserId();
+  if (!userId) return { status: "error", error: "Not authenticated." };
+  const supabase = createAdminClient();
 
   const { data: post } = await supabase
     .from("generated_posts")
     .select("id, platform, content")
     .eq("id", postId)
-    .eq("user_id", user.id)
+    .eq("user_id", userId)
     .single();
   if (!post) return { status: "error", error: "Post not found." };
 
-  const aiProvider = await loadDefaultAIProvider(user.id);
+  const aiProvider = await loadDefaultAIProvider(userId);
   if (!aiProvider) return { status: "error", error: "No default AI provider configured." };
 
   try {
@@ -226,17 +223,15 @@ export async function refineGeneratedPost(postId: string, action: string): Promi
 }
 
 export async function updateGeneratedPostContent(postId: string, content: string) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return;
+  const userId = await getCurrentUserId();
+  if (!userId) return;
+  const supabase = createAdminClient();
 
   await supabase
     .from("generated_posts")
     .update({ content })
     .eq("id", postId)
-    .eq("user_id", user.id);
+    .eq("user_id", userId);
   revalidatePath("/dashboard/posts");
 }
 
@@ -250,17 +245,15 @@ export async function publishGeneratedPost(
   accountId: string,
   scheduledFor?: string,
 ): Promise<PublishState> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return { status: "error", error: "Not authenticated." };
+  const userId = await getCurrentUserId();
+  if (!userId) return { status: "error", error: "Not authenticated." };
+  const supabase = createAdminClient();
 
   const { data: post } = await supabase
     .from("generated_posts")
     .select("id, platform, content")
     .eq("id", postId)
-    .eq("user_id", user.id)
+    .eq("user_id", userId)
     .single();
   if (!post) return { status: "error", error: "Post not found." };
 
@@ -268,13 +261,13 @@ export async function publishGeneratedPost(
     .from("connected_accounts")
     .select("id, external_account_id, encrypted_access_token, status")
     .eq("id", accountId)
-    .eq("user_id", user.id)
+    .eq("user_id", userId)
     .single();
   if (!account) return { status: "error", error: "Account not found." };
 
   if (scheduledFor) {
     await supabase.from("scheduled_posts").insert({
-      user_id: user.id,
+      user_id: userId,
       generated_post_id: postId,
       account_id: accountId,
       scheduled_for: scheduledFor,
@@ -314,7 +307,7 @@ export async function publishGeneratedPost(
     }
 
     await supabase.from("published_posts").insert({
-      user_id: user.id,
+      user_id: userId,
       generated_post_id: postId,
       account_id: accountId,
       external_id: result.externalId,

@@ -6,12 +6,11 @@ import { CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { createClient } from "@/lib/supabase/client";
+import { resetPassword } from "../actions";
 import { changePasswordSchema } from "@/lib/validation/security";
 
-export function ResetPasswordForm() {
+export function ResetPasswordForm({ token }: { token: string }) {
   const router = useRouter();
-  const supabase = createClient();
 
   const [newPassword, setNewPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
@@ -26,16 +25,18 @@ export function ResetPasswordForm() {
       setError(parsed.error.issues[0]?.message);
       return;
     }
+    if (!token) {
+      setError("This reset link is missing its token. Request a new one from the log in page.");
+      return;
+    }
 
     setSubmitting(true);
     setError(undefined);
-    const { error: updateError } = await supabase.auth.updateUser({ password: parsed.data.newPassword });
+    const result = await resetPassword({ token, password: parsed.data.newPassword });
     setSubmitting(false);
 
-    if (updateError) {
-      setError(
-        "This reset link may have expired. Request a new one from the log in page and try again.",
-      );
+    if (!result.ok) {
+      setError(result.error);
       return;
     }
     setDone(true);

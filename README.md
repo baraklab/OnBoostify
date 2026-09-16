@@ -1,34 +1,60 @@
 # OnBoostify
 
-Marketing muscle for your launches. Publish once, turn it into platform-native content, reach more people.
-
 ## Stack
 
-Next.js (App Router) · TypeScript · Tailwind CSS v4 · Supabase (Auth, Postgres, Row Level Security) · Lucide React
+- **Next.js** (App Router) + React + TypeScript
+- **Tailwind CSS v4**
+- **Supabase** — Postgres only. Auth is **not** Supabase Auth — see [Notes](#notes).
+- **Custom auth** — bcrypt password hashes + HMAC JWTs (`jose`), issued by Supabase Edge Functions (`supabase/functions/auth-*`) and verified in Next.js (`src/lib/auth/`, `src/proxy.ts`).
 
-## Getting started
+## Dev
 
-1. Install dependencies:
+**UI**
 
+```bash
+npm install
+npm run dev
+```
+
+http://localhost:3000
+
+**Backend (Supabase)**
+
+1. Create a Supabase project, then create `env/dev.env` (gitignored, loaded by `next.config.ts`) and fill in — see that file's own comments for details:
+   - `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` — Project Settings → API. The service_role key is used server-side only (`src/lib/supabase/admin.ts`); there's no anon/publishable key anywhere in the app.
+   - `JWT_SECRET` — `openssl rand -hex 32`. Must match `JWT_SECRET` in `supabase/functions/.env` exactly — both sides sign/verify the same tokens.
+   - `ENCRYPTION_SECRET` — `openssl rand -hex 32`. Encrypts OAuth tokens and BYOK AI keys at rest.
+   - `NEXT_PUBLIC_GOOGLE_CLIENT_ID` — Google OAuth 2.0 Client ID (Web application) for "Sign in with Google", from https://console.cloud.google.com/apis/credentials. Must match `GOOGLE_CLIENT_ID` in `supabase/functions/.env`.
+   - `X_CLIENT_ID`/`X_CLIENT_SECRET`, `LINKEDIN_CLIENT_ID`/`LINKEDIN_CLIENT_SECRET` — optional, only needed to connect those platforms.
+   - `TELEGRAM_BOT_TOKEN`/`TELEGRAM_CHAT_ID` — optional, only needed for newsletter-signup Telegram notifications (`src/lib/telegram.ts`); new-signup notifications fire from the edge functions instead (their own copy lives in `supabase/functions/.env`). Left blank, they just log to the console instead of failing.
+2. Run migrations:
    ```bash
-   npm install
+   supabase db push
    ```
-
-2. Create a Supabase project, then copy `.env.example` to `.env.local` and fill in:
-   - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` — from Project Settings → API.
-   - `SUPABASE_SERVICE_ROLE_KEY` — same page. Server-only, never expose to the client.
-   - `ENCRYPTION_SECRET` — generate with `openssl rand -hex 32`. Used to encrypt OAuth tokens and BYOK AI keys at rest.
-   - `X_CLIENT_ID` / `X_CLIENT_SECRET`, `LINKEDIN_CLIENT_ID` / `LINKEDIN_CLIENT_SECRET` — optional, only needed to enable connecting those platforms.
-
-3. Run the database migrations in `supabase/migrations/` against your project, in order (via the SQL editor in the Supabase dashboard, or the Supabase CLI: `supabase db push`).
-
-4. In the Supabase dashboard, enable the Google provider under Authentication → Providers if you want "Continue with Google" to work, and set the redirect URL to `<your-site-url>/auth/callback`.
-
-5. Start the dev server:
-
+3. Fill in `supabase/functions/.env` (its own copy of secrets, not shared with `env/dev.env` — see its comments), then deploy the auth edge functions and push their secrets:
    ```bash
-   npm run dev
+   supabase functions deploy
+   supabase secrets set --env-file supabase/functions/.env
    ```
+   The Next.js app never talks to Supabase Auth — sign-up, sign-in, Google sign-in, refresh, verify, and password reset all go through these `auth-*` functions.
+
+## Prod
+
+**UI**
+
+```bash
+npm run build
+npm start
+```
+
+**Backend**
+
+```bash
+supabase db push          # migrations
+supabase functions deploy # auth-* edge functions
+npx supabase functions deploy --no-verify-jwt  
+npx supabase db push  
+```
 
 ## Scripts
 
@@ -38,16 +64,12 @@ Next.js (App Router) · TypeScript · Tailwind CSS v4 · Supabase (Auth, Postgre
 - `npm run typecheck` — TypeScript, no emit
 - `npm run format` — Prettier
 
-## Architecture notes
+## Notes
 
-- **Platform integrations** (`src/lib/platforms/`): one adapter per platform behind a shared `PlatformProvider` interface. X and LinkedIn use OAuth 2.0 and support publishing through their APIs. Medium uses a user-supplied integration token (Medium stopped issuing new ones after 2023, so this only works for accounts that already have one). Substack has no public API — connecting it just stores the newsletter URL for backlink attribution and export formatting. Capabilities that a platform's API doesn't support are marked `false` in its definition and surfaced in the UI rather than faked.
-- **AI providers** (`src/lib/ai/`): BYOK via OpenAI, Anthropic, or OpenRouter behind a shared `AIProvider` interface. Keys are encrypted with AES-256-GCM (`src/lib/crypto.ts`) and only decrypted server-side.
-- **Database** (`supabase/migrations/`): hand-written SQL migrations with Row Level Security on every table. `src/types/database.ts` is a hand-authored type matching the schema — regenerate it with the Supabase CLI (`supabase gen types typescript`) if you add the CLI to this project later.
-- **Scheduling**: scheduling a post writes a `scheduled_posts` row and marks the post `scheduled`. There's no background worker in this codebase to actually fire those at their scheduled time yet — that needs a cron/queue (e.g. Supabase Cron, QStash, or a Vercel Cron Job calling a route handler that publishes anything due).
-
-## What's stubbed vs. real
-
-Everything in Accounts, Create, Workflows, Posts, and Settings talks to a real Supabase database and, where credentials are configured, real platform/AI provider APIs — there's no mocked data. The two things that need infrastructure beyond this codebase to be fully live:
-
-- **X and LinkedIn OAuth** need an app registered with each platform (client ID/secret in `.env.local`) before "Connect" does anything.
-- **Scheduled publishing** needs the worker described above; without it, scheduled posts sit in `scheduled_posts` until something publishes them.
+- **Auth**: hand-rolled, not Supabase Auth. `public.users` / `user_sessions` / `password_reset_codes` (bigint ids, bcrypt password hashes) replace `auth.users`. Sign-up/in/Google/refresh/verify/password-reset are Supabase Edge Functions (`supabase/functions/auth-*`, Deno) that mint HMAC JWTs; Next.js only ever verifies them (`src/lib/auth/jwt.ts`) and reads the current user id from a cookie (`src/lib/auth/session.ts`). `src/proxy.ts` refreshes an expiring access token and gates `/dashboard`. RLS isn't in play for these tables — every access goes through either an edge function or `src/lib/supabase/admin.ts`, both using the `service_role` key.
+- **Env files** (`env/`): `env/dev.env` and `env/prod.env` are gitignored and loaded by `next.config.ts` via `process.loadEnvFile`, picked by `NODE_ENV`/`APP_ENV`. It never overrides a variable already set in `process.env`, so on Vercel the dashboard-configured values always win over whatever (if anything) is in `env/prod.env` — that file is just a local reference for what production needs, with secrets left blank.
+- **Edge function secrets** (`supabase/functions/.env`): a separate, Deno-side set of secrets for the `auth-*` functions — not read by Next.js or `next.config.ts`. Push it with `supabase secrets set --env-file supabase/functions/.env`. `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `JWT_SECRET`, and `GOOGLE_CLIENT_ID` must match the same values in `env/dev.env`/`env/prod.env`, or tokens minted by the functions won't verify in Next.js (and vice versa).
+- **Platform integrations** (`src/lib/platforms/`): one adapter per platform behind a shared `PlatformProvider` interface. X and LinkedIn use OAuth 2.0. Medium uses a user-supplied integration token (Medium stopped issuing new ones after 2023). Substack has no public API — connecting it just stores the newsletter URL for backlink attribution.
+- **AI providers** (`src/lib/ai/`): BYOK via OpenAI, Anthropic, or OpenRouter behind a shared `AIProvider` interface. Keys are encrypted with AES-256-GCM (`src/lib/crypto.ts`), decrypted server-side only.
+- **Scheduling**: scheduling a post writes a `scheduled_posts` row; there's no background worker in this codebase to fire those yet — needs a cron/queue (Supabase Cron, QStash, or a Vercel Cron Job).
+- **Stubbed**: X/LinkedIn OAuth needs an app registered with each platform before "Connect" does anything. Scheduled publishing needs the worker above; until then, rows sit in `scheduled_posts`.

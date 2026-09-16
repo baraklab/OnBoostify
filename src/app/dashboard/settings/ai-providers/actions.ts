@@ -1,7 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentUserId } from "@/lib/auth/session";
 import { encryptSecret, decryptSecret } from "@/lib/crypto";
 import { aiProviderSchema } from "@/lib/validation/settings";
 import { getAIProvider } from "@/lib/ai/registry";
@@ -42,22 +43,20 @@ export async function saveAIProvider(_prev: ActionState, formData: FormData): Pr
     return { status: "error", error: parsed.error.issues[0]?.message };
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return { status: "error", error: "Not authenticated." };
+  const userId = await getCurrentUserId();
+  if (!userId) return { status: "error", error: "Not authenticated." };
+  const supabase = createAdminClient();
 
   const providerImpl = getAIProvider(parsed.data.provider);
   const test = await providerImpl.testConnection(parsed.data.apiKey, parsed.data.defaultModel);
 
   if (parsed.data.isDefault) {
-    await supabase.from("ai_providers").update({ is_default: false }).eq("user_id", user.id);
+    await supabase.from("ai_providers").update({ is_default: false }).eq("user_id", userId);
   }
 
   const { error } = await supabase.from("ai_providers").upsert(
     {
-      user_id: user.id,
+      user_id: userId,
       provider: parsed.data.provider,
       encrypted_api_key: encryptSecret(parsed.data.apiKey),
       default_model: parsed.data.defaultModel,
@@ -78,40 +77,34 @@ export async function saveAIProvider(_prev: ActionState, formData: FormData): Pr
 }
 
 export async function deleteAIProvider(id: string) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return;
+  const userId = await getCurrentUserId();
+  if (!userId) return;
+  const supabase = createAdminClient();
 
-  await supabase.from("ai_providers").delete().eq("id", id).eq("user_id", user.id);
+  await supabase.from("ai_providers").delete().eq("id", id).eq("user_id", userId);
   revalidatePath("/dashboard/settings/ai-providers");
 }
 
 export async function setDefaultAIProvider(id: string) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return;
+  const userId = await getCurrentUserId();
+  if (!userId) return;
+  const supabase = createAdminClient();
 
-  await supabase.from("ai_providers").update({ is_default: false }).eq("user_id", user.id);
-  await supabase.from("ai_providers").update({ is_default: true }).eq("id", id).eq("user_id", user.id);
+  await supabase.from("ai_providers").update({ is_default: false }).eq("user_id", userId);
+  await supabase.from("ai_providers").update({ is_default: true }).eq("id", id).eq("user_id", userId);
   revalidatePath("/dashboard/settings/ai-providers");
 }
 
 export async function testStoredAIProviderConnection(id: string): Promise<TestConnectionState> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return { status: "error", error: "Not authenticated." };
+  const userId = await getCurrentUserId();
+  if (!userId) return { status: "error", error: "Not authenticated." };
+  const supabase = createAdminClient();
 
   const { data } = await supabase
     .from("ai_providers")
     .select("provider, encrypted_api_key, default_model")
     .eq("id", id)
-    .eq("user_id", user.id)
+    .eq("user_id", userId)
     .single();
   if (!data) return { status: "error", error: "Provider not found." };
 
@@ -130,7 +123,7 @@ export async function testStoredAIProviderConnection(id: string): Promise<TestCo
 
 /** Server-only helper for other server code (content generation) to fetch a usable, decrypted key. */
 export async function getDecryptedAIProviderKey(userId: string, providerId: AIProviderIdDb) {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { data } = await supabase
     .from("ai_providers")
     .select("encrypted_api_key, default_model")

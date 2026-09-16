@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { notifyTelegram } from "@/lib/telegram";
 import type { ActionState } from "@/lib/types/action-state";
 
@@ -13,7 +13,7 @@ export async function subscribeToNewsletter(_prev: ActionState, formData: FormDa
     return { status: "error", error: parsed.error.issues[0]?.message };
   }
 
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { error } = await supabase.from("newsletter_subscribers").insert({ email: parsed.data });
 
   if (error) {

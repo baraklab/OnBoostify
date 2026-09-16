@@ -4,22 +4,21 @@ import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PlatformIcon } from "@/components/platform/platform-icon";
 import { Badge } from "@/components/ui/badge";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentUserId } from "@/lib/auth/session";
 import type { PlatformIdDb } from "@/types/database";
 
 export const metadata: Metadata = { title: "Connected accounts" };
 export const dynamic = "force-dynamic";
 
 export default async function ConnectedAccountsSettingsPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const supabase = createAdminClient();
+  const userId = (await getCurrentUserId())!;
 
   const { data: accounts } = await supabase
     .from("connected_accounts")
     .select("id, platform, display_name, status")
-    .eq("user_id", user!.id)
+    .eq("user_id", userId)
     .order("created_at", { ascending: true });
 
   return (

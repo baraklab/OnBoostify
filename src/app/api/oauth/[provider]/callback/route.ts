@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentUserId } from "@/lib/auth/session";
 import { getPlatform } from "@/lib/platforms/registry";
 import type { PlatformId } from "@/lib/platforms/types";
 import { encryptSecret } from "@/lib/crypto";
@@ -27,13 +28,11 @@ export async function GET(
     return NextResponse.redirect(`${origin}/dashboard/accounts?error=invalid_state`);
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) {
+  const userId = await getCurrentUserId();
+  if (!userId) {
     return NextResponse.redirect(`${origin}/login?next=/dashboard/accounts`);
   }
+  const supabase = createAdminClient();
 
   if (!platform.exchangeCodeForToken) {
     return NextResponse.redirect(`${origin}/dashboard/accounts?error=not_oauth`);
@@ -45,7 +44,7 @@ export async function GET(
 
     const { error } = await supabase.from("connected_accounts").upsert(
       {
-        user_id: user.id,
+        user_id: userId,
         platform: platformId,
         account_type: "profile",
         external_account_id: result.accountId,

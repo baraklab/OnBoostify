@@ -1,20 +1,19 @@
 import type { Metadata } from "next";
 import { ProfileList } from "./profile-list";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentUserId } from "@/lib/auth/session";
 
 export const metadata: Metadata = { title: "Content preferences" };
 export const dynamic = "force-dynamic";
 
 export default async function ContentPreferencesPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const supabase = createAdminClient();
+  const userId = (await getCurrentUserId())!;
 
   const { data: profiles } = await supabase
     .from("content_profiles")
     .select("*")
-    .eq("user_id", user!.id)
+    .eq("user_id", userId)
     .order("created_at", { ascending: true });
 
   return (

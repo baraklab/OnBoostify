@@ -49,13 +49,15 @@ export function SplitCard({
   );
 
   const body = (
-    <div className="flex-1 p-5 sm:p-6">
+    <div className="flex flex-1 flex-col justify-center p-5 sm:p-6">
       {eyebrow && <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{eyebrow}</p>}
       {wholeCardLink ? (
-        <h2 className="font-heading mt-1 text-lg font-semibold tracking-tight text-foreground">{title}</h2>
+        <h2 className="font-heading mt-1 line-clamp-2 text-lg font-semibold tracking-tight text-foreground">
+          {title}
+        </h2>
       ) : (
         <Link href={href} className="group/title after:absolute after:inset-0">
-          <h2 className="font-heading mt-1 text-lg font-semibold tracking-tight text-foreground group-hover/title:underline">
+          <h2 className="font-heading mt-1 line-clamp-2 text-lg font-semibold tracking-tight text-foreground group-hover/title:underline">
             {title}
           </h2>
         </Link>

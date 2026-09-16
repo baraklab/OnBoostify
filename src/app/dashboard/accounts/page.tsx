@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { CheckCircle2, AlertTriangle } from "lucide-react";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { PlatformGroup } from "./platform-group";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentUserId } from "@/lib/auth/session";
 import { platformList, isPlatformConfigured } from "@/lib/platforms/registry";
 import type { ConnectedAccountSummary } from "@/lib/platforms/types";
 import type { PlatformIdDb } from "@/types/database";
@@ -24,15 +25,13 @@ export default async function AccountsPage({
   searchParams: Promise<{ connected?: string; error?: string }>;
 }) {
   const { connected, error } = await searchParams;
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const supabase = createAdminClient();
+  const userId = (await getCurrentUserId())!;
 
   const { data: rows } = await supabase
     .from("connected_accounts")
     .select("id, platform, account_type, display_name, handle, avatar_url, status, last_synced_at")
-    .eq("user_id", user!.id)
+    .eq("user_id", userId)
     .order("created_at", { ascending: true });
 
   const accounts: ConnectedAccountSummary[] = (rows ?? []).map((row) => ({

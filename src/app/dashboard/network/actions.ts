@@ -1,7 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentUserId } from "@/lib/auth/session";
 import { networkProfileSchema } from "@/lib/validation/network";
 import type { ActionState } from "@/lib/types/action-state";
 
@@ -20,15 +21,13 @@ export async function saveNetworkProfile(_prev: ActionState, formData: FormData)
     return { status: "error", error: parsed.error.issues[0]?.message };
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return { status: "error", error: "Not authenticated." };
+  const userId = await getCurrentUserId();
+  if (!userId) return { status: "error", error: "Not authenticated." };
+  const supabase = createAdminClient();
 
   const { error } = await supabase.from("network_profiles").upsert(
     {
-      user_id: user.id,
+      user_id: userId,
       display_name: parsed.data.displayName,
       category: parsed.data.category,
       platforms: parsed.data.platforms,

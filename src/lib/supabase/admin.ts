@@ -2,15 +2,16 @@ import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/types/database";
 
 /**
- * Service-role client. Bypasses Row Level Security — use ONLY in trusted
- * server contexts (route handlers, server actions, background jobs) for
- * operations that must cross user boundaries (e.g. the OAuth callback
- * writing a token before the user's session cookie is fully established).
- * NEVER import this file into a Client Component or expose its output to
- * the browser.
+ * Service-role client. Bypasses Row Level Security — this is now the ONLY way any Next.js
+ * server code (route handlers, server actions, background jobs) talks to Postgres. Auth is
+ * no longer Supabase's own (see src/lib/auth/), so there is no Supabase session JWT for
+ * auth.uid()-based RLS to key off — every table's policies were dropped in
+ * supabase/migrations/0007_custom_auth.sql, and authorization instead means filtering every
+ * query by the user id from src/lib/auth/session.ts's getCurrentUserId(). NEVER import this
+ * file into a Client Component or expose its output to the browser.
  */
 export function createAdminClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const url = process.env.SUPABASE_URL;
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!url || !serviceRoleKey) {

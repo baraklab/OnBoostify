@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { getCurrentUserId } from "@/lib/auth/session";
 import { getPlatform, isPlatformConfigured } from "@/lib/platforms/registry";
 import type { PlatformId } from "@/lib/platforms/types";
 
@@ -19,11 +19,8 @@ export async function GET(
   const platformId = provider as PlatformId;
   const platform = getPlatform(platformId);
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) {
+  const userId = await getCurrentUserId();
+  if (!userId) {
     return NextResponse.redirect(`${origin}/login?next=/dashboard/accounts`);
   }
 

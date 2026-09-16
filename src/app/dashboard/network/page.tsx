@@ -4,17 +4,15 @@ import { PageHeader } from "@/components/dashboard/page-header";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ListingForm } from "./listing-form";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentUserId } from "@/lib/auth/session";
 
 export const metadata: Metadata = { title: "Network" };
 export const dynamic = "force-dynamic";
 
 export default async function DashboardNetworkPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  const userId = user!.id;
+  const supabase = createAdminClient();
+  const userId = (await getCurrentUserId())!;
 
   const [{ data: own }, { data: directory }] = await Promise.all([
     supabase

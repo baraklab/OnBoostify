@@ -1,7 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentUserId } from "@/lib/auth/session";
 import { encryptSecret } from "@/lib/crypto";
 import { connectMediumSchema, connectSubstackSchema } from "@/lib/validation/accounts";
 import type { ActionState } from "@/lib/types/action-state";
@@ -12,11 +13,9 @@ export async function connectMediumAccount(_prev: ActionState, formData: FormDat
     return { status: "error", error: parsed.error.issues[0]?.message };
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return { status: "error", error: "Not authenticated." };
+  const userId = await getCurrentUserId();
+  if (!userId) return { status: "error", error: "Not authenticated." };
+  const supabase = createAdminClient();
 
   let accountId: string;
   let accountName: string;
@@ -37,7 +36,7 @@ export async function connectMediumAccount(_prev: ActionState, formData: FormDat
 
   const { error } = await supabase.from("connected_accounts").upsert(
     {
-      user_id: user.id,
+      user_id: userId,
       platform: "medium",
       account_type: "profile",
       external_account_id: accountId,
@@ -64,15 +63,13 @@ export async function connectSubstackAccount(_prev: ActionState, formData: FormD
     return { status: "error", error: parsed.error.issues[0]?.message };
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return { status: "error", error: "Not authenticated." };
+  const userId = await getCurrentUserId();
+  if (!userId) return { status: "error", error: "Not authenticated." };
+  const supabase = createAdminClient();
 
   const { error } = await supabase.from("connected_accounts").upsert(
     {
-      user_id: user.id,
+      user_id: userId,
       platform: "substack",
       account_type: "publication",
       external_account_id: parsed.data.publicationUrl,
@@ -91,11 +88,9 @@ export async function connectSubstackAccount(_prev: ActionState, formData: FormD
 }
 
 export async function disconnectAccount(accountId: string) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return;
+  const userId = await getCurrentUserId();
+  if (!userId) return;
+  const supabase = createAdminClient();
 
   await supabase
     .from("connected_accounts")
@@ -105,18 +100,16 @@ export async function disconnectAccount(accountId: string) {
       encrypted_refresh_token: null,
     })
     .eq("id", accountId)
-    .eq("user_id", user.id);
+    .eq("user_id", userId);
 
   revalidatePath("/dashboard/accounts");
 }
 
 export async function deleteAccount(accountId: string) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return;
+  const userId = await getCurrentUserId();
+  if (!userId) return;
+  const supabase = createAdminClient();
 
-  await supabase.from("connected_accounts").delete().eq("id", accountId).eq("user_id", user.id);
+  await supabase.from("connected_accounts").delete().eq("id", accountId).eq("user_id", userId);
   revalidatePath("/dashboard/accounts");
 }

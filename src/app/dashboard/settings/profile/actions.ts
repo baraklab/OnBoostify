@@ -1,7 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentUserId } from "@/lib/auth/session";
 import { profileSchema } from "@/lib/validation/settings";
 import type { ActionState } from "@/lib/types/action-state";
 
@@ -16,11 +17,9 @@ export async function updateProfile(_prev: ActionState, formData: FormData): Pro
     return { status: "error", error: parsed.error.issues[0]?.message };
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return { status: "error", error: "Not authenticated." };
+  const userId = await getCurrentUserId();
+  if (!userId) return { status: "error", error: "Not authenticated." };
+  const supabase = createAdminClient();
 
   const { error } = await supabase
     .from("profiles")
@@ -29,7 +28,7 @@ export async function updateProfile(_prev: ActionState, formData: FormData): Pro
       company_name: parsed.data.companyName || null,
       website_url: parsed.data.websiteUrl || null,
     })
-    .eq("id", user.id);
+    .eq("id", userId);
 
   if (error) return { status: "error", error: "Could not save your profile." };
 

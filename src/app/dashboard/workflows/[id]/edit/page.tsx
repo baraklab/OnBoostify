@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { WorkflowBuilder } from "../../workflow-builder";
 import { updateWorkflow } from "../../actions";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentUserId } from "@/lib/auth/session";
 import type { PlatformIdDb } from "@/types/database";
 
 export const metadata: Metadata = { title: "Edit workflow" };
@@ -11,11 +12,8 @@ export const dynamic = "force-dynamic";
 
 export default async function EditWorkflowPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  const userId = user!.id;
+  const supabase = createAdminClient();
+  const userId = (await getCurrentUserId())!;
 
   const [{ data: workflow }, { data: steps }, { data: accountRows }, { data: contentProfiles }] =
     await Promise.all([

@@ -16,7 +16,8 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PlatformIcon } from "@/components/platform/platform-icon";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentUserId } from "@/lib/auth/session";
 import { truncate, formatDate } from "@/lib/utils";
 import type { PlatformIdDb } from "@/types/database";
 
@@ -33,11 +34,8 @@ const statusVariant = {
 } as const;
 
 export default async function DashboardOverviewPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  const userId = user!.id;
+  const supabase = createAdminClient();
+  const userId = (await getCurrentUserId())!;
 
   const [
     { count: connectedAccountsCount },

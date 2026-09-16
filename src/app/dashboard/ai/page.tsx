@@ -4,7 +4,8 @@ import { ArrowUpRight, CheckCircle2, Circle, Sliders } from "lucide-react";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentUserId } from "@/lib/auth/session";
 import { aiProviderList } from "@/lib/ai/registry";
 import type { AIProviderIdDb } from "@/types/database";
 
@@ -12,11 +13,8 @@ export const metadata: Metadata = { title: "AI" };
 export const dynamic = "force-dynamic";
 
 export default async function AIOverviewPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  const userId = user!.id;
+  const supabase = createAdminClient();
+  const userId = (await getCurrentUserId())!;
 
   const [{ data: providers }, { count: profileCount }] = await Promise.all([
     supabase.from("ai_providers").select("provider, is_default, last_test_status").eq("user_id", userId),

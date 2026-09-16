@@ -4,7 +4,8 @@ import { PageHeader } from "@/components/dashboard/page-header";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PlatformIcon } from "@/components/platform/platform-icon";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentUserId } from "@/lib/auth/session";
 import { truncate } from "@/lib/utils";
 import type { PlatformIdDb } from "@/types/database";
 
@@ -12,11 +13,8 @@ export const metadata: Metadata = { title: "Analytics" };
 export const dynamic = "force-dynamic";
 
 export default async function AnalyticsPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  const userId = user!.id;
+  const supabase = createAdminClient();
+  const userId = (await getCurrentUserId())!;
 
   const [{ count: publishedCount }, { count: backlinksCount }, { data: published }, { data: analyticsRows }] =
     await Promise.all([

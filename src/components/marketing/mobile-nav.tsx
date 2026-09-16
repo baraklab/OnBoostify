@@ -2,11 +2,11 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Menu, X, LogOut } from "lucide-react";
 import { marketingNav } from "@/lib/nav";
+import { logout } from "@/app/(auth)/actions";
 
-export function MobileNav({ isAuthenticated }: { isAuthenticated: boolean }) {
+export function MobileNav({ userName }: { userName: string | null }) {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -34,12 +34,29 @@ export function MobileNav({ isAuthenticated }: { isAuthenticated: boolean }) {
                 {item.label}
               </Link>
             ))}
+            {userName && (
+              <Link
+                href="/dashboard"
+                onClick={() => setOpen(false)}
+                className="text-sm font-medium text-foreground"
+              >
+                Dashboard
+              </Link>
+            )}
           </nav>
           <div className="mt-6 flex flex-col gap-2">
-            {isAuthenticated ? (
-              <Button asChild>
-                <Link href="/dashboard">Go to dashboard</Link>
-              </Button>
+            {userName ? (
+              <>
+                <p className="px-1 text-sm font-medium text-foreground">{userName}</p>
+                <form action={logout}>
+                  <button
+                    type="submit"
+                    className="flex w-full items-center justify-center gap-2 rounded-md px-4 py-2.5 text-sm font-semibold text-destructive hover:bg-destructive-soft"
+                  >
+                    <LogOut className="size-4" /> Log out
+                  </button>
+                </form>
+              </>
             ) : (
               <Link
                 href="/login"

@@ -1,21 +1,19 @@
 import type { Metadata } from "next";
 import { ProfileForm } from "./profile-form";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentUserId } from "@/lib/auth/session";
 
 export const metadata: Metadata = { title: "Profile settings" };
 export const dynamic = "force-dynamic";
 
 export default async function ProfileSettingsPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const supabase = createAdminClient();
+  const userId = (await getCurrentUserId())!;
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("full_name, company_name, website_url")
-    .eq("id", user!.id)
-    .single();
+  const [{ data: profile }, { data: user }] = await Promise.all([
+    supabase.from("profiles").select("full_name, company_name, website_url").eq("id", userId).single(),
+    supabase.from("users").select("email_id").eq("id", userId).single(),
+  ]);
 
   return (
     <div>
@@ -28,7 +26,7 @@ export default async function ProfileSettingsPage() {
           fullName={profile?.full_name ?? ""}
           companyName={profile?.company_name ?? ""}
           websiteUrl={profile?.website_url ?? ""}
-          email={user!.email ?? ""}
+          email={user?.email_id ?? ""}
         />
       </div>
     </div>

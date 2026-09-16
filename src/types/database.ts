@@ -40,6 +40,37 @@ interface Table<Row, Insert, Update> {
 export interface Database {
   public: {
     Tables: {
+      // bigint id, but represented as `string` here — every call site gets it as a string
+      // already (the JWT `sub` claim, and Postgrest doesn't care about the exact numeric
+      // type for query building), and `string` avoids bigint precision loss in JS `number`.
+      users: Table<
+        {
+          id: string;
+          email_id: string;
+          password_hash: string | null;
+          otp: string | null;
+          otp_expires_at: string | null;
+          otp_attempts: number;
+          verification_token_hash: string | null;
+          first_name: string | null;
+          last_name: string | null;
+          verified: boolean;
+          active: boolean;
+          created_at: string;
+        },
+        never,
+        Partial<{
+          password_hash: string | null;
+          otp: string | null;
+          otp_expires_at: string | null;
+          otp_attempts: number;
+          verification_token_hash: string | null;
+          first_name: string | null;
+          last_name: string | null;
+          verified: boolean;
+          active: boolean;
+        }>
+      >;
       profiles: Table<
         {
           id: string;

@@ -1,20 +1,19 @@
 import type { Metadata } from "next";
 import { NotificationsForm } from "./notifications-form";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentUserId } from "@/lib/auth/session";
 
 export const metadata: Metadata = { title: "Notification settings" };
 export const dynamic = "force-dynamic";
 
 export default async function NotificationsPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const supabase = createAdminClient();
+  const userId = (await getCurrentUserId())!;
 
   const { data: profile } = await supabase
     .from("profiles")
     .select("notification_preferences")
-    .eq("id", user!.id)
+    .eq("id", userId)
     .single();
 
   return (

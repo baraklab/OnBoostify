@@ -8,9 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { GoogleButton } from "./google-button";
-import { notifySignup } from "./notify-actions";
-import { createClient } from "@/lib/supabase/client";
+import { login, signup, verifyCode, resendCode, requestPasswordReset } from "./actions";
 import { loginSchema, signUpSchema, forgotPasswordSchema } from "@/lib/validation/auth";
+import { cn } from "@/lib/utils";
 
 type Mode = "signin" | "signup";
 
@@ -33,7 +33,6 @@ const COPY: Record<Mode, { heading: string; submitLabel: string; submittingLabel
 
 export function AuthCard({ initialMode }: { initialMode: Mode }) {
   const router = useRouter();
-  const supabase = createClient();
 
   const [mode, setMode] = React.useState<Mode>(initialMode);
   const [showForgot, setShowForgot] = React.useState(false);
@@ -44,7 +43,7 @@ export function AuthCard({ initialMode }: { initialMode: Mode }) {
   const [showPassword, setShowPassword] = React.useState(false);
   const [errors, setErrors] = React.useState<{ name?: string; email?: string; password?: string; form?: string }>({});
   const [submitting, setSubmitting] = React.useState(false);
-  const [checkEmail, setCheckEmail] = React.useState(false);
+  const [pendingVerification, setPendingVerification] = React.useState(false);
 
   function flipTo(next: Mode) {
     setErrors({});
@@ -69,10 +68,14 @@ export function AuthCard({ initialMode }: { initialMode: Mode }) {
       }
       setSubmitting(true);
       setErrors({});
-      const { error } = await supabase.auth.signInWithPassword(parsed.data);
+      const result = await login(parsed.data.email, parsed.data.password);
       setSubmitting(false);
-      if (error) {
-        setErrors({ form: "Incorrect email or password." });
+      if (!result.ok) {
+        setErrors({ form: result.error });
+        return;
+      }
+      if (result.requiresVerification) {
+        setPendingVerification(true);
         return;
       }
       router.push("/dashboard");
@@ -89,25 +92,24 @@ export function AuthCard({ initialMode }: { initialMode: Mode }) {
     }
     setSubmitting(true);
     setErrors({});
-    const { data, error } = await supabase.auth.signUp({
-      email: parsed.data.email,
-      password: parsed.data.password,
-      options: { data: { full_name: parsed.data.fullName } },
-    });
+    const result = await signup(parsed.data.fullName, parsed.data.email, parsed.data.password);
     setSubmitting(false);
-    if (error) {
-      setErrors({ form: error.message });
+    if (!result.ok) {
+      setErrors({ form: result.error });
       return;
     }
-
-    void notifySignup(parsed.data.email, parsed.data.fullName);
-
-    if (!data.session) {
-      setCheckEmail(true);
+    if (result.requiresVerification) {
+      setPendingVerification(true);
       return;
     }
     router.push("/dashboard");
     router.refresh();
+  }
+
+  if (pendingVerification) {
+    return (
+      <VerifyFace email={email} onBack={() => setPendingVerification(false)} />
+    );
   }
 
   return (
@@ -127,7 +129,6 @@ export function AuthCard({ initialMode }: { initialMode: Mode }) {
             setShowPassword={setShowPassword}
             errors={errors}
             submitting={submitting}
-            checkEmail={false}
             onSubmit={onSubmit}
             onToggle={() => flipTo("signup")}
             onForgot={flipToForgot}
@@ -151,7 +152,6 @@ export function AuthCard({ initialMode }: { initialMode: Mode }) {
               setShowPassword={setShowPassword}
               errors={errors}
               submitting={submitting}
-              checkEmail={checkEmail}
               onSubmit={onSubmit}
               onToggle={() => flipTo("signin")}
             />
@@ -175,7 +175,6 @@ function AuthFace({
   setShowPassword,
   errors,
   submitting,
-  checkEmail,
   onSubmit,
   onToggle,
   onForgot,
@@ -192,7 +191,6 @@ function AuthFace({
   setShowPassword: (fn: (prev: boolean) => boolean) => void;
   errors: { name?: string; email?: string; password?: string; form?: string };
   submitting: boolean;
-  checkEmail: boolean;
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   onToggle: () => void;
   onForgot?: () => void;
@@ -200,43 +198,21 @@ function AuthFace({
   const copy = COPY[mode];
   const inert = active ? {} : { tabIndex: -1, "aria-hidden": true as const };
 
-  if (mode === "signup" && checkEmail) {
-    return (
-      <div className="auth-card rounded-lg border border-border bg-card p-7 shadow-sm">
-        <div className="mx-auto flex size-10 items-center justify-center rounded-full bg-accent-soft">
-          <CheckCircle2 className="size-5 text-accent" />
-        </div>
-        <h1 className="font-heading mt-4 text-center text-lg font-semibold text-foreground">
-          Check your email
-        </h1>
-        <p className="mt-2 text-center text-sm text-muted-foreground">
-          We sent a confirmation link. Click it to activate your account.
-        </p>
-      </div>
-    );
-  }
-
   return (
     <div className="auth-card rounded-lg border border-border bg-card p-7 shadow-sm">
       <h1 className="font-heading text-center text-xl font-semibold text-foreground">{copy.heading}</h1>
 
-      <div className="mt-6">
-        <GoogleButton />
-      </div>
-
-      <div className="my-5 flex items-center gap-3">
-        <div className="h-px flex-1 bg-border" />
-        <span className="text-xs text-muted-foreground">or</span>
-        <div className="h-px flex-1 bg-border" />
-      </div>
-
       {active && errors.form && (
-        <p className="mb-4 rounded-md bg-destructive-soft px-3 py-2 text-sm text-destructive" role="alert">
+        <p className="mt-6 rounded-md bg-destructive-soft px-3 py-2 text-sm text-destructive" role="alert">
           {errors.form}
         </p>
       )}
 
-      <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate={active}>
+      <form
+        onSubmit={onSubmit}
+        className={cn("flex flex-col gap-4", !(active && errors.form) && "mt-6")}
+        noValidate={active}
+      >
         {mode === "signup" && (
           <div className="flex flex-col gap-1.5">
             <Label htmlFor={`${mode}-name`}>Full name</Label>
@@ -309,6 +285,14 @@ function AuthFace({
         </Button>
       </form>
 
+      <div className="my-5 flex items-center gap-3">
+        <div className="h-px flex-1 bg-border" />
+        <span className="text-xs text-muted-foreground">or</span>
+        <div className="h-px flex-1 bg-border" />
+      </div>
+
+      <GoogleButton />
+
       <p className="mt-6 text-center text-sm text-muted-foreground">
         {copy.toggleHint}{" "}
         <Link
@@ -328,7 +312,6 @@ function AuthFace({
 }
 
 function ForgotPasswordFace({ onBack }: { onBack: () => void }) {
-  const supabase = createClient();
   const [email, setEmail] = React.useState("");
   const [error, setError] = React.useState<string>();
   const [submitting, setSubmitting] = React.useState(false);
@@ -343,13 +326,11 @@ function ForgotPasswordFace({ onBack }: { onBack: () => void }) {
     }
     setSubmitting(true);
     setError(undefined);
-    const { error: resetError } = await supabase.auth.resetPasswordForEmail(parsed.data.email, {
-      redirectTo: `${window.location.origin}/auth/callback?next=/reset-password`,
-    });
+    const result = await requestPasswordReset(parsed.data.email);
     setSubmitting(false);
     // Deliberately shows success either way — the backend won't say whether an
     // account exists for that address, and neither should the UI.
-    if (resetError) setError(resetError.message);
+    if (!result.ok) setError(result.error);
     else setSent(true);
   }
 
@@ -397,6 +378,86 @@ function ForgotPasswordFace({ onBack }: { onBack: () => void }) {
           </button>
         </form>
       )}
+    </div>
+  );
+}
+
+function VerifyFace({ email, onBack }: { email: string; onBack: () => void }) {
+  const router = useRouter();
+  const [code, setCode] = React.useState("");
+  const [error, setError] = React.useState<string>();
+  const [submitting, setSubmitting] = React.useState(false);
+  const [resent, setResent] = React.useState(false);
+
+  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!code.trim()) {
+      setError("Enter the code we emailed you.");
+      return;
+    }
+    setSubmitting(true);
+    setError(undefined);
+    const result = await verifyCode(code.trim());
+    setSubmitting(false);
+    if (!result.ok) {
+      setError(result.error);
+      return;
+    }
+    router.push("/dashboard");
+    router.refresh();
+  }
+
+  async function onResend() {
+    setError(undefined);
+    setResent(false);
+    const result = await resendCode();
+    if (!result.ok) setError(result.error);
+    else setResent(true);
+  }
+
+  return (
+    <div className="auth-card rounded-lg border border-border bg-card p-7 shadow-sm">
+      <div className="mx-auto flex size-10 items-center justify-center rounded-full bg-accent-soft">
+        <CheckCircle2 className="size-5 text-accent" />
+      </div>
+      <h1 className="font-heading mt-4 text-center text-lg font-semibold text-foreground">
+        Check your email
+      </h1>
+      <p className="mt-2 text-center text-sm text-muted-foreground">
+        We sent a 6-digit code {email ? <>to <strong className="text-foreground">{email}</strong></> : null}. Enter
+        it below, or click the link in the email.
+      </p>
+
+      <form onSubmit={onSubmit} className="mt-6 flex flex-col gap-4">
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="verify-code">Verification code</Label>
+          <Input
+            id="verify-code"
+            inputMode="numeric"
+            autoComplete="one-time-code"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+          />
+        </div>
+        {error && (
+          <p className="text-sm text-destructive" role="alert">
+            {error}
+          </p>
+        )}
+        {resent && !error && <p className="text-sm text-success">A new code is on its way.</p>}
+        <Button type="submit" loading={submitting}>
+          Verify
+        </Button>
+      </form>
+
+      <div className="mt-5 flex items-center justify-between text-sm">
+        <button type="button" onClick={onBack} className="font-medium text-muted-foreground hover:text-foreground">
+          Back
+        </button>
+        <button type="button" onClick={onResend} className="font-medium text-foreground hover:underline">
+          Resend code
+        </button>
+      </div>
     </div>
   );
 }

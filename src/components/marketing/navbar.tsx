@@ -1,21 +1,32 @@
 import Link from "next/link";
 import { Logo } from "./logo";
 import { MobileNav } from "./mobile-nav";
-import { Button } from "@/components/ui/button";
+import { NavUserMenu } from "./nav-user-menu";
 import { marketingNav } from "@/lib/nav";
-import { createClient } from "@/lib/supabase/server";
+import { getCurrentUserId } from "@/lib/auth/session";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function Navbar() {
   // The header (and its sign-in/get-started buttons) must always render, even if
-  // Supabase isn't reachable or configured yet — treat any failure as "signed out"
-  // rather than letting it take the whole nav down.
-  let user = null;
+  // the session cookie is unreadable — treat any failure as "signed out" rather
+  // than letting it take the whole nav down.
+  let userId: string | null = null;
   try {
-    const supabase = await createClient();
-    const result = await supabase.auth.getUser();
-    user = result.data.user;
+    userId = await getCurrentUserId();
   } catch {
-    user = null;
+    userId = null;
+  }
+
+  let displayName: string | null = null;
+  if (userId) {
+    try {
+      const supabase = createAdminClient();
+      const { data: user } = await supabase.from("users").select("email_id, first_name").eq("id", userId).single();
+      const { data: profile } = await supabase.from("profiles").select("full_name").eq("id", userId).single();
+      displayName = profile?.full_name || user?.first_name || user?.email_id?.split("@")[0] || "Account";
+    } catch {
+      displayName = "Account";
+    }
   }
 
   return (
@@ -34,13 +45,19 @@ export async function Navbar() {
                 {item.label}
               </Link>
             ))}
+            {displayName && (
+              <Link
+                href="/dashboard"
+                className="text-[15px] font-medium text-muted-foreground transition-colors hover:text-foreground"
+              >
+                Dashboard
+              </Link>
+            )}
           </nav>
 
           <div className="flex items-center gap-3">
-            {user ? (
-              <Button asChild size="sm">
-                <Link href="/dashboard">Go to dashboard</Link>
-              </Button>
+            {displayName ? (
+              <NavUserMenu name={displayName} />
             ) : (
               <Link
                 href="/login"
@@ -52,7 +69,7 @@ export async function Navbar() {
           </div>
         </div>
 
-        <MobileNav isAuthenticated={Boolean(user)} />
+        <MobileNav userName={displayName} />
       </div>
     </header>
   );

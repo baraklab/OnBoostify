@@ -22,7 +22,7 @@ export default function BlogIndexPage() {
         ])}
       />
       <section className="border-b border-border">
-        <div className="mx-auto max-w-4xl px-6 py-16 sm:py-20">
+        <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
           <p className="text-eyebrow text-center">Blog</p>
           <h1 className="font-heading mx-auto mt-3 max-w-xl text-center text-3xl font-semibold tracking-tight text-foreground">
             Notes on launches, growth, and building OnBoostify.
@@ -38,6 +38,7 @@ export default function BlogIndexPage() {
                 eyebrow={post.category}
                 title={post.title}
                 description={post.description}
+                className="sm:h-56"
                 meta={
                   <div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground">
                     <span>{post.author}</span>

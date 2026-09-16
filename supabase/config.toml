@@ -1,0 +1,54 @@
+[functions.auth-signup]
+enabled = true
+verify_jwt = false
+entrypoint = "./functions/auth-signup/index.ts"
+
+[functions.auth-signin]
+enabled = true
+verify_jwt = false
+entrypoint = "./functions/auth-signin/index.ts"
+
+[functions.auth-google]
+enabled = true
+verify_jwt = false
+entrypoint = "./functions/auth-google/index.ts"
+
+[functions.auth-verify]
+enabled = true
+verify_jwt = false
+entrypoint = "./functions/auth-verify/index.ts"
+
+[functions.auth-verify-link]
+enabled = true
+verify_jwt = false
+entrypoint = "./functions/auth-verify-link/index.ts"
+
+[functions.auth-resend-code]
+enabled = true
+verify_jwt = false
+entrypoint = "./functions/auth-resend-code/index.ts"
+
+[functions.auth-user]
+enabled = true
+verify_jwt = false
+entrypoint = "./functions/auth-user/index.ts"
+
+[functions.auth-refresh]
+enabled = true
+verify_jwt = false
+entrypoint = "./functions/auth-refresh/index.ts"
+
+[functions.auth-logout]
+enabled = true
+verify_jwt = false
+entrypoint = "./functions/auth-logout/index.ts"
+
+[functions.auth-forgot-password]
+enabled = true
+verify_jwt = false
+entrypoint = "./functions/auth-forgot-password/index.ts"
+
+[functions.auth-reset-password]
+enabled = true
+verify_jwt = false
+entrypoint = "./functions/auth-reset-password/index.ts"

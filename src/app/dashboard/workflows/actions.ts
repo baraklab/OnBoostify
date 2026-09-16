@@ -2,7 +2,8 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentUserId } from "@/lib/auth/session";
 import { workflowSchema, type WorkflowInput } from "@/lib/validation/workflows";
 import type { ActionState } from "@/lib/types/action-state";
 import type { PlatformIdDb } from "@/types/database";
@@ -28,7 +29,7 @@ function parseForm(formData: FormData) {
 }
 
 async function writeSteps(
-  supabase: Awaited<ReturnType<typeof createClient>>,
+  supabase: ReturnType<typeof createAdminClient>,
   workflowId: string,
   parsed: WorkflowInput,
 ) {
@@ -80,16 +81,14 @@ export async function createWorkflow(_prev: ActionState, formData: FormData): Pr
     return { status: "error", error: parsed.error.issues[0]?.message };
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return { status: "error", error: "Not authenticated." };
+  const userId = await getCurrentUserId();
+  if (!userId) return { status: "error", error: "Not authenticated." };
+  const supabase = createAdminClient();
 
   const { data: workflow, error } = await supabase
     .from("workflows")
     .insert({
-      user_id: user.id,
+      user_id: userId,
       name: parsed.data.name,
       source_type: parsed.data.sourceType,
       source_account_id: parsed.data.sourceAccountId || null,
@@ -117,11 +116,9 @@ export async function updateWorkflow(
     return { status: "error", error: parsed.error.issues[0]?.message };
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return { status: "error", error: "Not authenticated." };
+  const userId = await getCurrentUserId();
+  if (!userId) return { status: "error", error: "Not authenticated." };
+  const supabase = createAdminClient();
 
   const { error } = await supabase
     .from("workflows")
@@ -134,7 +131,7 @@ export async function updateWorkflow(
       publish_mode: parsed.data.publishMode,
     })
     .eq("id", workflowId)
-    .eq("user_id", user.id);
+    .eq("user_id", userId);
 
   if (error) return { status: "error", error: "Could not update workflow." };
 
@@ -144,27 +141,23 @@ export async function updateWorkflow(
 }
 
 export async function deleteWorkflow(workflowId: string) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return;
+  const userId = await getCurrentUserId();
+  if (!userId) return;
+  const supabase = createAdminClient();
 
-  await supabase.from("workflows").delete().eq("id", workflowId).eq("user_id", user.id);
+  await supabase.from("workflows").delete().eq("id", workflowId).eq("user_id", userId);
   revalidatePath("/dashboard/workflows");
 }
 
 export async function toggleWorkflowActive(workflowId: string, isActive: boolean) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return;
+  const userId = await getCurrentUserId();
+  if (!userId) return;
+  const supabase = createAdminClient();
 
   await supabase
     .from("workflows")
     .update({ is_active: isActive })
     .eq("id", workflowId)
-    .eq("user_id", user.id);
+    .eq("user_id", userId);
   revalidatePath("/dashboard/workflows");
 }

@@ -5,18 +5,16 @@ import { PageHeader } from "@/components/dashboard/page-header";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { WorkflowRow } from "./workflow-row";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentUserId } from "@/lib/auth/session";
 import type { PlatformIdDb } from "@/types/database";
 
 export const metadata: Metadata = { title: "Workflows" };
 export const dynamic = "force-dynamic";
 
 export default async function WorkflowsPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  const userId = user!.id;
+  const supabase = createAdminClient();
+  const userId = (await getCurrentUserId())!;
 
   const { data: workflows } = await supabase
     .from("workflows")
