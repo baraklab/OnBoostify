@@ -27,6 +27,7 @@ http://localhost:3000
    - `NEXT_PUBLIC_GOOGLE_CLIENT_ID` — Google OAuth 2.0 Client ID (Web application) for "Sign in with Google", from https://console.cloud.google.com/apis/credentials. Must match `GOOGLE_CLIENT_ID` in `supabase/functions/.env`.
    - `X_CLIENT_ID`/`X_CLIENT_SECRET`, `LINKEDIN_CLIENT_ID`/`LINKEDIN_CLIENT_SECRET` — optional, only needed to connect those platforms.
    - `TELEGRAM_BOT_TOKEN`/`TELEGRAM_CHAT_ID` — optional, only needed for newsletter-signup Telegram notifications (`src/lib/telegram.ts`); new-signup notifications fire from the edge functions instead (their own copy lives in `supabase/functions/.env`). Left blank, they just log to the console instead of failing.
+   - `NEXT_PUBLIC_GA_ID` — optional, GA4 measurement ID (`G-XXXXXXX`) for Google Analytics (`src/components/analytics/google-analytics.tsx`). Left blank, no analytics script loads at all. When set, it still only fires after the cookie banner/settings modal records analytics opt-in (`src/lib/cookie-consent.ts`).
 2. Run migrations:
    ```bash
    supabase db push

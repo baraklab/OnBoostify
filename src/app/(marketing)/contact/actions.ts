@@ -1,6 +1,7 @@
 "use server";
 
 import { createAdminClient } from "@/lib/supabase/admin";
+import { notifyTelegram } from "@/lib/telegram";
 import { contactSchema } from "@/lib/validation/contact";
 
 export interface ContactFormState {
@@ -28,6 +29,10 @@ export async function submitContactForm(
   if (error) {
     return { status: "error", error: "Something went wrong. Please try again." };
   }
+
+  await notifyTelegram(
+    `📬 New OnBoostify contact message\n\n👤 ${parsed.data.name}\n📧 ${parsed.data.email}\n\n💬 ${parsed.data.message}`,
+  );
 
   return { status: "success" };
 }

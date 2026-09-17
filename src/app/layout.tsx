@@ -1,10 +1,13 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import { JsonLd } from "@/components/seo/json-ld";
 import { CookieBanner } from "@/components/marketing/cookie-banner";
+import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo/jsonld";
 import { pageMetadata } from "@/lib/seo/metadata";
 import { siteConfig } from "@/lib/seo/config";
+import { STORAGE_KEY } from "@/lib/cookie-consent";
 import "./globals.css";
 
 const inter = Inter({
@@ -49,6 +52,26 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${inter.variable} ${geist.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-background text-foreground">
+        <Script id="ga-consent-default" strategy="beforeInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){ window.dataLayer.push(arguments); }
+            window.gtag = gtag;
+            gtag('consent', 'default', {
+              analytics_storage: 'denied',
+              ad_storage: 'denied',
+              ad_user_data: 'denied',
+              ad_personalization: 'denied'
+            });
+            try {
+              var stored = JSON.parse(localStorage.getItem('${STORAGE_KEY}') || 'null');
+              if (stored && stored.analytics) {
+                gtag('consent', 'update', { analytics_storage: 'granted' });
+              }
+            } catch (e) {}
+          `}
+        </Script>
+        <GoogleAnalytics />
         <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
         {children}
         <CookieBanner />

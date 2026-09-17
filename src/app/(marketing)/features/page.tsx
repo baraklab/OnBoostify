@@ -17,12 +17,6 @@ export const metadata: Metadata = pageMetadata({
   path: "/features",
 });
 
-const CTA_VARIANTS = [
-  { label: "Read more", color: "#4f46e5" },
-  { label: "Know more", color: "#0284c7" },
-  { label: "Explore the feature", color: "#059669" },
-];
-
 export default function FeaturesPage() {
   return (
     <>
@@ -33,36 +27,29 @@ export default function FeaturesPage() {
         ])}
       />
 
-      <section className="border-b border-border">
-        <div className="mx-auto max-w-4xl px-6 py-16 text-center sm:py-20">
-          <p className="text-eyebrow">Features</p>
-          <h1 className="font-heading mx-auto mt-3 max-w-2xl text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-            Everything a launch needs, without the manual rewriting.
+      <section id="integrations">
+        <div className="mx-auto max-w-6xl px-6 pb-16 pt-8 sm:pb-20 sm:pt-10">
+          <p className="text-eyebrow text-center">Features</p>
+          <h1 className="font-heading mx-auto mt-3 max-w-xl text-center text-3xl font-semibold tracking-tight text-foreground">
+            Everything a product needs. <br/>Post everywhere. Get influencers to promote your product.
           </h1>
-          <p className="mx-auto mt-4 max-w-xl text-[15px] leading-relaxed text-muted-foreground">
-            OnBoostify is built around one idea: you write it once, and the platform adapts it —
-            it doesn&apos;t duplicate it.
+          <p className="mx-auto mt-4 max-w-xl text-center text-[15px] leading-relaxed text-muted-foreground">
+            Publish once, automatically create platform-native posts, and connect with influencers who can
+  help get your product in front of more people — organically.
           </p>
-        </div>
-      </section>
 
-      <section id="integrations" className="border-b border-border">
-        <div className="mx-auto max-w-4xl px-6 py-16 sm:py-20">
-          <div className="flex flex-col gap-6">
-            {FEATURE_LIST.map((feature, index) => {
-              const variant = CTA_VARIANTS[index % CTA_VARIANTS.length];
-              return (
-                <SplitCard
-                  key={feature.slug}
-                  href={`/features/${feature.slug}`}
-                  color={feature.color}
-                  title={feature.title}
-                  description={feature.description}
-                  cta={variant}
-                  wholeCardLink={false}
-                />
-              );
-            })}
+          <div className="mt-12 flex flex-col gap-6">
+            {FEATURE_LIST.map((feature) => (
+              <SplitCard
+                key={feature.slug}
+                href={`/features/${feature.slug}`}
+                color={feature.color}
+                title={feature.title}
+                description={feature.description}
+                cta="Read more"
+                className="sm:h-56"
+              />
+            ))}
           </div>
         </div>
       </section>

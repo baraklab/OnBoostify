@@ -22,10 +22,10 @@ export default function BlogIndexPage() {
         ])}
       />
       <section className="border-b border-border">
-        <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
+        <div className="mx-auto max-w-6xl px-6 pb-16 pt-8 sm:pb-20 sm:pt-10">
           <p className="text-eyebrow text-center">Blog</p>
           <h1 className="font-heading mx-auto mt-3 max-w-xl text-center text-3xl font-semibold tracking-tight text-foreground">
-            Notes on launches, growth, and building OnBoostify.
+            Learn how SaaS founders grow faster organically, get more customers, reduce churn, and build better products.
           </h1>
 
           <div className="mt-12 flex flex-col gap-6">

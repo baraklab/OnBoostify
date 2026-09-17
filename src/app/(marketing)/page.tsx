@@ -38,7 +38,7 @@ export const metadata: Metadata = pageMetadata({
 
 const useCases = [
   { icon: Rocket, label: "Product launches" },
-  { icon: GitBranch, label: "GitHub repositories" },
+  { icon: GitBranch, label: "GitHub stars" },
   { icon: Megaphone, label: "Product Hunt launches" },
   { icon: FileText, label: "Blog posts" },
   { icon: Newspaper, label: "Announcements" },
@@ -88,11 +88,10 @@ export default function HomePage() {
             <div>
               <p className="text-eyebrow">Marketing operating system for launches</p>
               <h1 className="font-heading mt-4 text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
-                Marketing muscle for your launches.
+                Marketing muscle for your products.
               </h1>
               <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
-                Publish once, turn it into platform-native posts, build backlinks, and get your
-                launch in front of more people.
+                Publish once, turn it into platform-native posts, build backlinks, and get influencers to promote it.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Button size="lg" asChild>

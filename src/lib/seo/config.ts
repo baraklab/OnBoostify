@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: "OnBoostify",
-  tagline: "Marketing muscle for your launches.",
+  tagline: "Marketing muscle for your products.",
   description:
     "OnBoostify turns one post into platform-native content for X, LinkedIn, Medium, and Substack, generates backlinks for your launch, and helps you reach more people through the OnBoostify network.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://onboostify.com",

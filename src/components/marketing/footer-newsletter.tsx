@@ -17,7 +17,7 @@ export function FooterNewsletter() {
           Subscribe to our Newsletter
         </h3>
         <p className="mt-2 text-sm text-muted-foreground">
-          Notes on launches, growth, and building OnBoostify — sent straight to your inbox.
+          Learn how SaaS founders grow faster organically, get more customers, reduce churn, and build better products.
         </p>
 
         {state.status === "success" ? (

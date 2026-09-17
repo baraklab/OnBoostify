@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { ReactNode } from "react";
-import { ImageIcon } from "lucide-react";
+import { ImageIcon, ArrowRight } from "lucide-react";
 import { frameGradient } from "@/lib/color";
 import { cn } from "@/lib/utils";
 
@@ -17,7 +17,6 @@ export function SplitCard({
   description,
   meta,
   cta,
-  wholeCardLink = true,
   className,
 }: {
   href: string;
@@ -27,8 +26,7 @@ export function SplitCard({
   title: string;
   description: string;
   meta?: ReactNode;
-  cta?: { label: string; color: string };
-  wholeCardLink?: boolean;
+  cta?: string;
   className?: string;
 }) {
   // A supplied `image` is a fully designed 1200x630 thumbnail — render it
@@ -51,27 +49,16 @@ export function SplitCard({
   const body = (
     <div className="flex flex-1 flex-col justify-center p-5 sm:p-6">
       {eyebrow && <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{eyebrow}</p>}
-      {wholeCardLink ? (
-        <h2 className="font-heading mt-1 line-clamp-2 text-lg font-semibold tracking-tight text-foreground">
-          {title}
-        </h2>
-      ) : (
-        <Link href={href} className="group/title after:absolute after:inset-0">
-          <h2 className="font-heading mt-1 line-clamp-2 text-lg font-semibold tracking-tight text-foreground group-hover/title:underline">
-            {title}
-          </h2>
-        </Link>
-      )}
+      <h2 className="font-heading mt-1 line-clamp-2 text-lg font-semibold tracking-tight text-foreground">
+        {title}
+      </h2>
       <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted-foreground">{description}</p>
       {meta}
       {cta && (
-        <Link
-          href={href}
-          className="relative z-10 mt-3 inline-flex items-center rounded-[10px] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-transform hover:-translate-y-0.5"
-          style={{ backgroundColor: cta.color }}
-        >
-          {cta.label}
-        </Link>
+        <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-foreground">
+          {cta}
+          <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+        </span>
       )}
     </div>
   );
@@ -81,19 +68,10 @@ export function SplitCard({
     className,
   );
 
-  if (wholeCardLink) {
-    return (
-      <Link href={href} className={containerClass}>
-        {body}
-        {thumb}
-      </Link>
-    );
-  }
-
   return (
-    <div className={containerClass}>
+    <Link href={href} className={containerClass}>
       {body}
       {thumb}
-    </div>
+    </Link>
   );
 }

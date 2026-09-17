@@ -1,5 +1,6 @@
-const STORAGE_KEY = "onboostify-cookie-consent";
+export const STORAGE_KEY = "onboostify-cookie-consent";
 const OPEN_SETTINGS_EVENT = "onboostify:open-cookie-settings";
+const CONSENT_CHANGED_EVENT = "onboostify:consent-changed";
 
 export interface CookieConsent {
   necessary: true;
@@ -23,6 +24,15 @@ export function storeConsent(consent: CookieConsent) {
   } catch {
     // Private browsing or blocked storage — nothing to persist to.
   }
+  window.dispatchEvent(new CustomEvent<CookieConsent>(CONSENT_CHANGED_EVENT, { detail: consent }));
+}
+
+/** Notifies listeners (e.g. Google Analytics) the moment the user saves a new
+ * choice, so consent updates take effect immediately without a page reload. */
+export function onConsentChange(handler: (consent: CookieConsent) => void) {
+  const listener = (event: Event) => handler((event as CustomEvent<CookieConsent>).detail);
+  window.addEventListener(CONSENT_CHANGED_EVENT, listener);
+  return () => window.removeEventListener(CONSENT_CHANGED_EVENT, listener);
 }
 
 /** Opens the cookie settings modal from anywhere (e.g. the footer link),
