@@ -33,7 +33,7 @@ export function SplitCard({
   // edge-to-edge. Only the icon placeholder gets the padded gradient frame.
   const thumb = image ? (
     <div className="relative aspect-[16/9] w-full shrink-0 overflow-hidden sm:aspect-auto sm:h-auto sm:w-2/5">
-      <Image src={image} alt="" fill className="object-cover" />
+      <Image src={image} alt={title} fill className="object-cover" />
     </div>
   ) : (
     <div

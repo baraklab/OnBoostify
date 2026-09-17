@@ -8,9 +8,10 @@ import { circularRelated, relatedByHash } from "@/lib/related";
 import { PromoCard } from "@/components/marketing/promo-card";
 import { PostSidebar } from "@/components/marketing/post-sidebar";
 import { JsonLd } from "@/components/seo/json-ld";
-import { breadcrumbJsonLd } from "@/lib/seo/jsonld";
+import { breadcrumbJsonLd, webPageJsonLd } from "@/lib/seo/jsonld";
 import { pageMetadata } from "@/lib/seo/metadata";
 import { frameGradient } from "@/lib/color";
+import { renderInlineMarkdown } from "@/lib/inline-markdown";
 
 const blogCategoryIcons: Record<string, typeof FileText> = {
   Growth: TrendingUp,
@@ -38,6 +39,7 @@ export async function generateMetadata({
     title: feature.title,
     description: feature.description,
     path: `/features/${feature.slug}`,
+    eyebrow: "Feature",
   });
 }
 
@@ -57,11 +59,18 @@ export default async function FeatureDetailPage({
   return (
     <article className="border-b border-border">
       <JsonLd
-        data={breadcrumbJsonLd([
-          { name: "Home", path: "/" },
-          { name: "Features", path: "/features" },
-          { name: feature.title, path: `/features/${feature.slug}` },
-        ])}
+        data={[
+          webPageJsonLd({
+            title: feature.title,
+            description: feature.description,
+            path: `/features/${feature.slug}`,
+          }),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Features", path: "/features" },
+            { name: feature.title, path: `/features/${feature.slug}` },
+          ]),
+        ]}
       />
 
       <div className="mx-auto max-w-5xl px-6 py-16 sm:py-20">
@@ -95,14 +104,19 @@ export default async function FeatureDetailPage({
             <div className="mt-6 flex flex-col gap-4">
               {feature.body.map((paragraph, index) => (
                 <p key={index} className="text-[15px] leading-relaxed text-muted-foreground">
-                  {paragraph}
+                  {renderInlineMarkdown(paragraph)}
                 </p>
               ))}
             </div>
 
             {relatedFeatures.length > 0 && (
               <div className="mt-16 border-t border-border pt-8">
-                <p className="text-eyebrow">Related features</p>
+                <div className="flex items-baseline justify-between">
+                  <p className="text-eyebrow">Related features</p>
+                  <Link href="/features" className="text-eyebrow hover:text-foreground">
+                    View all features
+                  </Link>
+                </div>
                 <div className="mt-4 grid gap-4 sm:grid-cols-2">
                   {relatedFeatures.map((relatedFeature) => (
                     <PromoCard
@@ -121,7 +135,12 @@ export default async function FeatureDetailPage({
 
             {relatedPosts.length > 0 && (
               <div className="mt-12 border-t border-border pt-8">
-                <p className="text-eyebrow">Read our blogs</p>
+                <div className="flex items-baseline justify-between">
+                  <p className="text-eyebrow">Read our blogs</p>
+                  <Link href="/blog" className="text-eyebrow hover:text-foreground">
+                    View all posts
+                  </Link>
+                </div>
                 <div className="mt-4 grid gap-4 sm:grid-cols-2">
                   {relatedPosts.map((post) => (
                     <PromoCard

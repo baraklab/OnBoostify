@@ -6,32 +6,40 @@ import { SectionHeading } from "@/components/marketing/section-heading";
 import { WorkflowMap } from "@/components/marketing/workflow-map";
 import { SplitCard } from "@/components/marketing/split-card";
 import { JsonLd } from "@/components/seo/json-ld";
-import { breadcrumbJsonLd } from "@/lib/seo/jsonld";
+import { breadcrumbJsonLd, webPageJsonLd } from "@/lib/seo/jsonld";
 import { pageMetadata } from "@/lib/seo/metadata";
 import { FEATURE_LIST } from "@/lib/features-data";
 
+const title = "Features";
+const description =
+  "Multi-account platform connections, an AI content transformation engine, BYOK, visual workflows, and auto-generated backlinks — how OnBoostify turns one post into a full launch push.";
+
 export const metadata: Metadata = pageMetadata({
-  title: "Features",
-  description:
-    "Multi-account platform connections, an AI content transformation engine, BYOK, visual workflows, and auto-generated backlinks — how OnBoostify turns one post into a full launch push.",
+  title,
+  description,
   path: "/features",
+  eyebrow: "Features",
 });
 
 export default function FeaturesPage() {
   return (
     <>
       <JsonLd
-        data={breadcrumbJsonLd([
-          { name: "Home", path: "/" },
-          { name: "Features", path: "/features" },
-        ])}
+        data={[
+          webPageJsonLd({ title, description, path: "/features" }),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Features", path: "/features" },
+          ]),
+        ]}
       />
 
       <section id="integrations">
         <div className="mx-auto max-w-6xl px-6 pb-16 pt-8 sm:pb-20 sm:pt-10">
-          <p className="text-eyebrow text-center">Features</p>
-          <h1 className="font-heading mx-auto mt-3 max-w-xl text-center text-3xl font-semibold tracking-tight text-foreground">
-            Everything a product needs. <br/>Post everywhere. Get influencers to promote your product.
+          <h1 className="font-heading mx-auto max-w-4xl text-center text-3xl font-semibold tracking-tight text-foreground">
+            Everything a product needs.
+            <br />
+            Post everywhere. Get influencers to promote your product.
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-center text-[15px] leading-relaxed text-muted-foreground">
             Publish once, automatically create platform-native posts, and connect with influencers who can

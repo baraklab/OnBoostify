@@ -14,7 +14,7 @@ export const FEATURE_LIST: FeatureItem[] = [
       "Write once. OnBoostify rewrites it into a platform-native version for each destination — a LinkedIn post, a Medium article with headings, or a Substack newsletter — without just copy-pasting the same text.",
     color: "#4f46e5",
     body: [
-      "Every platform rewards a different shape of writing. X wants a tight hook. LinkedIn wants context and a personal angle. Medium wants structure and depth. Substack wants a conversational newsletter voice. Posting the same paragraph everywhere ignores all of that, and readers can tell.",
+      "Every platform rewards a different shape of writing. X wants a tight hook. LinkedIn wants context and a personal angle. Medium wants structure and depth. Substack wants a conversational newsletter voice. Posting the same paragraph everywhere ignores all of that, and readers can tell — see [how to automatically post from X and LinkedIn to multiple platforms](/blog/how-to-automatically-post-from-x-linkedin-to-multiple-platforms) for a step-by-step walkthrough.",
       "The transformation engine takes your source post and generates a version tailored to each destination's format and length, while keeping the source as the single source of truth — it doesn't invent facts, numbers, or quotes that weren't in the original.",
       "Every generated version shows up in the composer as an editable draft. Nothing publishes until you've reviewed it, and any manual edits you make are saved back before the post goes out.",
     ],
@@ -63,7 +63,7 @@ export const FEATURE_LIST: FeatureItem[] = [
     color: "#db2777",
     body: [
       "Turning one launch into a Medium article, a Substack post, and a LinkedIn post that all link back to your product is genuinely useful — as long as the link doesn't turn the post into keyword-stuffed junk.",
-      "When you add a backlink to a post, you set the canonical URL and destination URL explicitly, write your own anchor text, and optionally add UTM parameters — nothing is auto-guessed or generated for you.",
+      "When you add a backlink to a post, you set the canonical URL and destination URL explicitly, write your own anchor text, and optionally add UTM parameters — nothing is auto-guessed or generated for you. Read more on how we approach this in [Backlinks without being spammy](/blog/backlinks-without-being-spammy).",
       "Every generated post is written to stand on its own as something worth reading first. The link is secondary to that — if a post wouldn't hold up without the link in it, that's a failure of the generation, not an acceptable trade-off.",
     ],
   },
@@ -76,7 +76,7 @@ export const FEATURE_LIST: FeatureItem[] = [
     body: [
       "A workflow is a saved pipeline: pick a source (an account or input type), one or more destination platforms and accounts, a content profile for the AI rewrite, and an approval mode — manual or automatic.",
       "Once it's set up, running the workflow again doesn't require reconfiguring anything. New source content flows through the same destinations with the same tone and the same approval step every time.",
-      "You choose whether each workflow publishes immediately, on a schedule, or only ever creates drafts for you to publish by hand — the workflow doesn't decide that for you.",
+      "You choose whether each workflow publishes immediately, on a schedule, or only ever creates drafts for you to publish by hand — the workflow doesn't decide that for you. See [pricing](/pricing) for plan limits on active workflows.",
     ],
   },
   {

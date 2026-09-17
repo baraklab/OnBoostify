@@ -5,12 +5,12 @@ export const marketingNav = [
 ];
 
 export const footerNav = {
-  product: [
+  resources1: [
     { label: "Pricing", href: "/pricing" },
     { label: "Platforms", href: "/platforms" },
     { label: "Network", href: "/network" },
   ],
-  resources: [
+  resources2: [
     { label: "Blog", href: "/blog" },
     { label: "Features", href: "/features" },
     { label: "FAQ", href: "/faq" },

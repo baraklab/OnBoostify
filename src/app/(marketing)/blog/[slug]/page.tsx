@@ -10,7 +10,7 @@ import { BlogContent } from "@/components/marketing/blog-content";
 import { PromoCard } from "@/components/marketing/promo-card";
 import { PostSidebar } from "@/components/marketing/post-sidebar";
 import { JsonLd } from "@/components/seo/json-ld";
-import { articleJsonLd, breadcrumbJsonLd } from "@/lib/seo/jsonld";
+import { articleJsonLd, breadcrumbJsonLd, faqJsonLd } from "@/lib/seo/jsonld";
 import { pageMetadata } from "@/lib/seo/metadata";
 import { formatDate } from "@/lib/utils";
 import { frameGradient } from "@/lib/color";
@@ -42,6 +42,7 @@ export async function generateMetadata({
     description: post.description,
     path: `/blog/${post.slug}`,
     image: post.thumbnail,
+    eyebrow: post.category,
     type: "article",
     publishedTime: post.date,
     modifiedTime: post.updatedAt ?? post.date,
@@ -60,6 +61,8 @@ export default async function BlogPostPage({
 
   const relatedPosts = getRelatedPosts(post);
   const relatedFeatures = relatedByHash(FEATURE_LIST, post.slug, 2);
+  const faqBlock = post.body.find((block) => block.type === "faq");
+  const hasVisibleFaq = faqBlock?.type === "faq" && faqBlock.items.length > 0;
 
   return (
     <article className="border-b border-border">
@@ -81,6 +84,7 @@ export default async function BlogPostPage({
             { name: "Blog", path: "/blog" },
             { name: post.title, path: `/blog/${post.slug}` },
           ]),
+          ...(hasVisibleFaq && faqBlock?.type === "faq" ? [faqJsonLd(faqBlock.items)] : []),
         ]}
       />
 
@@ -105,7 +109,17 @@ export default async function BlogPostPage({
               {post.category}
             </span>
             <span aria-hidden="true">·</span>
+            <span>By {post.author}</span>
+            <span aria-hidden="true">·</span>
             <time dateTime={post.date}>{formatDate(post.date)}</time>
+            {post.updatedAt && post.updatedAt !== post.date && (
+              <>
+                <span aria-hidden="true">·</span>
+                <span>
+                  Updated <time dateTime={post.updatedAt}>{formatDate(post.updatedAt)}</time>
+                </span>
+              </>
+            )}
             <span aria-hidden="true">·</span>
             <span>{post.readingTime}</span>
           </div>
@@ -119,7 +133,7 @@ export default async function BlogPostPage({
             >
               {post.thumbnail ? (
                 <div className="relative size-full overflow-hidden rounded-lg">
-                  <Image src={post.thumbnail} alt="" fill priority className="object-cover" />
+                  <Image src={post.thumbnail} alt={post.title} fill priority className="object-cover" />
                 </div>
               ) : (
                 <div className="flex size-full items-center justify-center">
@@ -138,7 +152,12 @@ export default async function BlogPostPage({
 
             {relatedPosts.length > 0 && (
               <div className="mt-16 border-t border-border pt-8">
-                <p className="text-eyebrow">Related posts</p>
+                <div className="flex items-baseline justify-between">
+                  <p className="text-eyebrow">Related posts</p>
+                  <Link href="/blog" className="text-eyebrow hover:text-foreground">
+                    View all posts
+                  </Link>
+                </div>
                 <div className="mt-4 grid gap-4 sm:grid-cols-2">
                   {relatedPosts.map((relatedPost) => (
                     <PromoCard
@@ -158,7 +177,12 @@ export default async function BlogPostPage({
 
             {relatedFeatures.length > 0 && (
               <div className="mt-12 border-t border-border pt-8">
-                <p className="text-eyebrow">Read our features</p>
+                <div className="flex items-baseline justify-between">
+                  <p className="text-eyebrow">Read our features</p>
+                  <Link href="/features" className="text-eyebrow hover:text-foreground">
+                    View all features
+                  </Link>
+                </div>
                 <div className="mt-4 grid gap-4 sm:grid-cols-2">
                   {relatedFeatures.map((feature) => (
                     <PromoCard

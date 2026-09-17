@@ -6,6 +6,7 @@ interface PageMetadataInput {
   description: string;
   path?: string;
   image?: string;
+  eyebrow?: string;
   type?: "website" | "article";
   publishedTime?: string;
   modifiedTime?: string;
@@ -23,6 +24,7 @@ export function pageMetadata({
   description,
   path = "/",
   image,
+  eyebrow,
   type = "website",
   publishedTime,
   modifiedTime,
@@ -30,9 +32,11 @@ export function pageMetadata({
   noIndex = false,
 }: PageMetadataInput): Metadata {
   const url = new URL(path, siteConfig.url).toString();
+  const ogImageParams = new URLSearchParams({ title });
+  if (eyebrow) ogImageParams.set("eyebrow", eyebrow);
   const ogImage = image
     ? new URL(image, siteConfig.url).toString()
-    : new URL(`/api/og?title=${encodeURIComponent(title)}`, siteConfig.url).toString();
+    : new URL(`/api/og?${ogImageParams.toString()}`, siteConfig.url).toString();
   const fullTitle = path === "/" ? title : `${title} · ${siteConfig.name}`;
 
   return {
@@ -40,6 +44,9 @@ export function pageMetadata({
     description,
     alternates: {
       canonical: url,
+      types: {
+        "application/rss+xml": absoluteUrl("/feed.xml"),
+      },
     },
     robots: noIndex
       ? { index: false, follow: false }

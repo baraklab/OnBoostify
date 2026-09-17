@@ -38,8 +38,8 @@ export function Footer() {
             </p>
             <p className="mt-1 max-w-[26ch] text-sm text-muted-foreground">{siteConfig.tagline}</p>
           </div>
-          <FooterColumn title="Product" links={footerNav.product} />
-          <FooterColumn title="Resources" links={footerNav.resources} />
+          <FooterColumn title="Resources" links={footerNav.resources1} />
+          <FooterColumn title="Resources" links={footerNav.resources2} />
           <FooterColumn title="Company" links={footerNav.company} />
           <div>
             <h3 className="text-eyebrow">Legal</h3>
