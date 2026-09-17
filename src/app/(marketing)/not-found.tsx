@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import { Navbar } from "@/components/marketing/navbar";
-import { Footer } from "@/components/marketing/footer";
 import { NotFoundContent } from "@/components/marketing/not-found-content";
 import { pageMetadata } from "@/lib/seo/metadata";
 
@@ -11,14 +9,6 @@ export const metadata: Metadata = pageMetadata({
   noIndex: true,
 });
 
-export default function NotFound() {
-  return (
-    <div className="flex min-h-full flex-col">
-      <Navbar />
-      <main className="flex-1">
-        <NotFoundContent />
-      </main>
-      <Footer />
-    </div>
-  );
+export default function MarketingNotFound() {
+  return <NotFoundContent />;
 }
