@@ -642,6 +642,7 @@ export const blogPosts: BlogPost[] = [
     category: "Product",
     tags: ["cross-posting", "content strategy"],
     readingTime: "4 min read",
+    thumbnail: "/images/blog/one-post-should-not-mean-six-rewrites/create-once-adapt-everywhere-og.png",
     body: [
       {
         type: "text",
@@ -695,7 +696,6 @@ export const blogPosts: BlogPost[] = [
     "Learn how to turn one post into platform-native content and automatically publish it across X, LinkedIn, and other social platforms with OnBoostify.",
   author: "OnBoostify Team",
   date: "2026-05-21",
-  updatedAt: "2026-09-17",
   color: "#0284c7",
   category: "Growth",
   tags: [
@@ -706,6 +706,8 @@ export const blogPosts: BlogPost[] = [
     "SaaS marketing",
   ],
   readingTime: "7 min read",
+  thumbnail:
+    "/images/blog/how-to-automatically-post-from-x-linkedin-to-multiple-platforms/one-post-everywhere-og.png",
   body: [
     {
       type: "text",
@@ -928,6 +930,7 @@ export const blogPosts: BlogPost[] = [
     category: "Marketing",
     tags: ["backlinks", "SEO", "launches"],
     readingTime: "3 min read",
+    thumbnail: "/images/blog/backlinks-without-being-spammy/earn-backlinks-the-right-way-og.png",
     body: [
       {
         type: "text",
