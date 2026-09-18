@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { SectionHeading } from "@/components/marketing/section-heading";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { JsonLd } from "@/components/seo/json-ld";
+import { breadcrumbJsonLd } from "@/lib/seo/jsonld";
 import { pageMetadata } from "@/lib/seo/metadata";
 import { siteConfig } from "@/lib/seo/config";
 import { getBlockColorForLabel } from "@/lib/block-colors";
@@ -35,6 +37,12 @@ export default async function NetworkPage() {
 
   return (
     <>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Network", path: "/network" },
+        ])}
+      />
       <section className="border-b border-border">
         <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
           <p className="text-eyebrow">Network</p>

@@ -16,6 +16,11 @@ import {
   Key,
   TrendingUp,
   Code2,
+  Users2,
+  Link as LinkIcon,
+  GitMerge,
+  ShieldCheck,
+  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { WorkflowMap } from "@/components/marketing/workflow-map";
@@ -27,6 +32,7 @@ import { pageMetadata } from "@/lib/seo/metadata";
 import { siteConfig } from "@/lib/seo/config";
 import { getBlockColor } from "@/lib/block-colors";
 import { getLatestPosts } from "@/lib/blog/posts";
+import { FEATURE_LIST } from "@/lib/features-data";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = pageMetadata({
@@ -47,25 +53,26 @@ const useCases = [
   { icon: Link2, label: "Marketing campaigns" },
 ];
 
-const exploreFeatures = [
-  {
-    href: "/features",
-    color: "#4f46e5",
-    icon: Workflow,
-    eyebrow: "Feature",
-    title: "Content transformation engine",
-    description:
-      "Write once. OnBoostify rewrites it into a platform-native version for each destination.",
-  },
-  {
-    href: "/features",
-    color: "#d97706",
-    icon: Key,
-    eyebrow: "Feature",
-    title: "Bring your own AI key",
-    description: "Connect OpenAI, Anthropic, or OpenRouter with your own key. No token markup.",
-  },
-];
+const featureIcons: Record<string, typeof FileText> = {
+  "content-transformation-engine": Sparkles,
+  "content-profiles": Wand2,
+  "bring-your-own-ai-key": Key,
+  "multiple-accounts-per-platform": Users2,
+  "auto-generated-backlinks": LinkIcon,
+  workflows: Workflow,
+  "manual-approval": ShieldCheck,
+  "quick-edits": GitMerge,
+};
+
+const exploreFeatures = FEATURE_LIST.slice(0, 2).map((feature) => ({
+  href: `/features/${feature.slug}`,
+  color: feature.color,
+  icon: featureIcons[feature.slug] ?? Workflow,
+  image: feature.thumbnail,
+  eyebrow: "Feature",
+  title: feature.title,
+  description: feature.description,
+}));
 
 const blogCategoryIcons: Record<string, typeof FileText> = {
   Growth: TrendingUp,
@@ -307,10 +314,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
           <SectionHeading eyebrow="Explore more" title="Features and Blog" />
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {exploreFeatures.map((feature) => (
-              <PromoCard key={feature.title} {...feature} />
-            ))}
-            {latestPosts.map((post) => (
+            {latestPosts.flatMap((post, index) => [
               <PromoCard
                 key={post.slug}
                 href={`/blog/${post.slug}`}
@@ -320,8 +324,11 @@ export default function HomePage() {
                 eyebrow={post.category}
                 title={post.title}
                 description={post.description}
-              />
-            ))}
+              />,
+              exploreFeatures[index] && (
+                <PromoCard key={exploreFeatures[index].title} {...exploreFeatures[index]} />
+              ),
+            ])}
           </div>
         </div>
       </section>

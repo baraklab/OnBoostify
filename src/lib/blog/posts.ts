@@ -642,6 +642,7 @@ export const blogPosts: BlogPost[] = [
     category: "Product",
     tags: ["cross-posting", "content strategy"],
     readingTime: "4 min read",
+    thumbnail: "/images/blog/one-post-should-not-mean-six-rewrites/create-once-adapt-everywhere-og.png",
     body: [
       {
         type: "text",
@@ -686,6 +687,35 @@ export const blogPosts: BlogPost[] = [
         content:
           "That's the whole premise of OnBoostify: publish once, let the platform adaptation do the rewriting, and spend the time you saved actually talking to the people who respond.",
       },
+      {
+        type: "heading",
+        content: "Frequently asked questions",
+      },
+      {
+        type: "faq",
+        items: [
+          {
+            question: "How do I post the same update to LinkedIn, X, and Medium without rewriting it every time?",
+            answer:
+              "Write it once as a source post, then use a tool that rewrites it per platform instead of duplicating the text — a tight hook for X, more context for LinkedIn, headings and structure for Medium. That's what OnBoostify's transformation engine does automatically.",
+          },
+          {
+            question: "Is it bad to post identical text on every social platform?",
+            answer:
+              "It usually underperforms rather than getting penalized. A 280-character hook reads as lazy on LinkedIn, and a tweet pasted into Medium has no structure — readers and platforms both notice the mismatch, even if nothing technically breaks.",
+          },
+          {
+            question: "Can AI actually rewrite a post for each platform without changing the facts?",
+            answer:
+              "Yes, if it's built to. The source post stays the single source of truth, and each generated version is restructured for length, tone, and format only — it shouldn't invent numbers, quotes, or claims that weren't in the original.",
+          },
+          {
+            question: "What's the best way to repurpose one blog post into multiple social posts?",
+            answer:
+              "Treat the blog post as the source and generate a shorter, platform-shaped version for each destination instead of manually excerpting it yourself. Review each draft before it publishes so nothing goes out that doesn't sound like you.",
+          },
+        ],
+      },
     ],
   },
  {
@@ -695,7 +725,6 @@ export const blogPosts: BlogPost[] = [
     "Learn how to turn one post into platform-native content and automatically publish it across X, LinkedIn, and other social platforms with OnBoostify.",
   author: "OnBoostify Team",
   date: "2026-05-21",
-  updatedAt: "2026-09-17",
   color: "#0284c7",
   category: "Growth",
   tags: [
@@ -706,6 +735,8 @@ export const blogPosts: BlogPost[] = [
     "SaaS marketing",
   ],
   readingTime: "7 min read",
+  thumbnail:
+    "/images/blog/how-to-automatically-post-from-x-linkedin-to-multiple-platforms/one-post-everywhere-og.png",
   body: [
     {
       type: "text",
@@ -928,6 +959,7 @@ export const blogPosts: BlogPost[] = [
     category: "Marketing",
     tags: ["backlinks", "SEO", "launches"],
     readingTime: "3 min read",
+    thumbnail: "/images/blog/backlinks-without-being-spammy/earn-backlinks-the-right-way-og.png",
     body: [
       {
         type: "text",
@@ -951,6 +983,35 @@ export const blogPosts: BlogPost[] = [
         type: "text",
         content:
           "If a generated post wouldn't be worth reading without the link in it, we consider that a failure of the generation, not an acceptable trade-off for the backlink.",
+      },
+      {
+        type: "heading",
+        content: "Frequently asked questions",
+      },
+      {
+        type: "faq",
+        items: [
+          {
+            question: "Will Google penalize me for AI-generated backlinks?",
+            answer:
+              "Not if the content around the link is genuinely worth reading and the link is relevant — that's what matters, not whether AI helped write it. What gets penalized is templated, keyword-stuffed text built only to house a link, AI-written or not.",
+          },
+          {
+            question: "What's the difference between a natural backlink and a spammy one?",
+            answer:
+              "A natural backlink sits inside a full, readable piece of content where the link is a secondary, relevant reference. A spammy one is the same generic paragraph pasted everywhere with a link jammed in — readers and search engines both notice the difference.",
+          },
+          {
+            question: "How do I get backlinks from my own launch content without it looking spammy?",
+            answer:
+              "Write (or generate) a genuinely useful version of your update for each platform, set your own anchor text and destination URL instead of letting anything auto-guess them, and make sure the post would still be worth reading with the link removed.",
+          },
+          {
+            question: "Do UTM parameters in a backlink hurt SEO?",
+            answer:
+              "No. UTM parameters are just for your own click tracking — they don't affect the canonical link or its SEO value, so adding them is safe and optional.",
+          },
+        ],
       },
     ],
   },

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ArrowLeft, TrendingUp, Wand2, Code2, Megaphone, FileText } from "lucide-react";
@@ -8,10 +9,11 @@ import { circularRelated, relatedByHash } from "@/lib/related";
 import { PromoCard } from "@/components/marketing/promo-card";
 import { PostSidebar } from "@/components/marketing/post-sidebar";
 import { JsonLd } from "@/components/seo/json-ld";
-import { breadcrumbJsonLd, webPageJsonLd } from "@/lib/seo/jsonld";
+import { breadcrumbJsonLd, faqJsonLd, webPageJsonLd } from "@/lib/seo/jsonld";
 import { pageMetadata } from "@/lib/seo/metadata";
 import { frameGradient } from "@/lib/color";
 import { renderInlineMarkdown } from "@/lib/inline-markdown";
+import { cn } from "@/lib/utils";
 
 const blogCategoryIcons: Record<string, typeof FileText> = {
   Growth: TrendingUp,
@@ -39,6 +41,7 @@ export async function generateMetadata({
     title: feature.title,
     description: feature.description,
     path: `/features/${feature.slug}`,
+    image: feature.thumbnail,
     eyebrow: "Feature",
   });
 }
@@ -55,6 +58,7 @@ export default async function FeatureDetailPage({
   const currentIndex = FEATURE_LIST.findIndex((f) => f.slug === feature.slug);
   const relatedFeatures = circularRelated(FEATURE_LIST, currentIndex, 2);
   const relatedPosts = relatedByHash(blogPosts, feature.slug, 2);
+  const hasFaq = !!feature.faq && feature.faq.length > 0;
 
   return (
     <article className="border-b border-border">
@@ -70,6 +74,7 @@ export default async function FeatureDetailPage({
             { name: "Features", path: "/features" },
             { name: feature.title, path: `/features/${feature.slug}` },
           ]),
+          ...(hasFaq ? [faqJsonLd(feature.faq!)] : []),
         ]}
       />
 
@@ -90,12 +95,18 @@ export default async function FeatureDetailPage({
 
         <div className="mt-10 grid items-start gap-12 lg:grid-cols-[minmax(0,1fr)_320px]">
           <div className="min-w-0 max-w-3xl">
-            <div
-              className="flex aspect-[16/7] w-full items-center justify-center overflow-hidden rounded-lg"
-              style={{ backgroundImage: frameGradient(feature.color) }}
-            >
-              <Wand2 className="size-10 text-white/60" aria-hidden="true" />
-            </div>
+            {feature.thumbnail ? (
+              <div className="relative aspect-[16/7] w-full overflow-hidden rounded-lg border border-black/25 shadow-sm">
+                <Image src={feature.thumbnail} alt={feature.title} fill priority className="object-cover" />
+              </div>
+            ) : (
+              <div
+                className="flex aspect-[16/7] w-full items-center justify-center overflow-hidden rounded-lg"
+                style={{ backgroundImage: frameGradient(feature.color) }}
+              >
+                <Wand2 className="size-10 text-white/60" aria-hidden="true" />
+              </div>
+            )}
 
             <p className="mt-6 text-lg font-medium leading-relaxed text-foreground">
               {feature.description}
@@ -109,8 +120,26 @@ export default async function FeatureDetailPage({
               ))}
             </div>
 
-            {relatedFeatures.length > 0 && (
+            {hasFaq && (
               <div className="mt-16 border-t border-border pt-8">
+                <p className="text-eyebrow">Frequently asked questions</p>
+                <div className="mt-4 flex flex-col divide-y divide-border">
+                  {feature.faq!.map((item, index) => (
+                    <div key={index} className="py-4 first:pt-0">
+                      <h3 className="font-heading text-base font-semibold text-foreground">
+                        {item.question}
+                      </h3>
+                      <p className="mt-1.5 text-[15px] leading-relaxed text-muted-foreground">
+                        {renderInlineMarkdown(item.answer)}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {relatedFeatures.length > 0 && (
+              <div className={cn("border-t border-border pt-8", hasFaq ? "mt-12" : "mt-16")}>
                 <div className="flex items-baseline justify-between">
                   <p className="text-eyebrow">Related features</p>
                   <Link href="/features" className="text-eyebrow hover:text-foreground">
@@ -124,6 +153,7 @@ export default async function FeatureDetailPage({
                       href={`/features/${relatedFeature.slug}`}
                       color={relatedFeature.color}
                       icon={featureIcon}
+                      image={relatedFeature.thumbnail}
                       eyebrow="Feature"
                       title={relatedFeature.title}
                       description={relatedFeature.description}

@@ -101,27 +101,39 @@ export default async function BlogPostPage({
           <h1 className="font-heading mt-6 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
             {post.title}
           </h1>
-          <div className="mt-4 flex items-center gap-3 text-sm text-muted-foreground">
+          <div className="font-mono-tech mt-4 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-muted-foreground sm:text-[13px]">
             <span
               className="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium text-white"
               style={{ backgroundColor: post.color }}
             >
               {post.category}
             </span>
-            <span aria-hidden="true">·</span>
-            <span>By {post.author}</span>
-            <span aria-hidden="true">·</span>
-            <time dateTime={post.date}>{formatDate(post.date)}</time>
+            <span aria-hidden="true" className="text-border">
+              /
+            </span>
+            <span>
+              By <span className="font-semibold" style={{ color: post.color }}>{post.author}</span>
+            </span>
+            <span aria-hidden="true" className="text-border">
+              /
+            </span>
+            <time dateTime={post.date} className="uppercase tracking-wide" style={{ color: post.color }}>
+              {formatDate(post.date)}
+            </time>
             {post.updatedAt && post.updatedAt !== post.date && (
               <>
-                <span aria-hidden="true">·</span>
-                <span>
+                <span aria-hidden="true" className="text-border">
+                  /
+                </span>
+                <span className="uppercase tracking-wide">
                   Updated <time dateTime={post.updatedAt}>{formatDate(post.updatedAt)}</time>
                 </span>
               </>
             )}
-            <span aria-hidden="true">·</span>
-            <span>{post.readingTime}</span>
+            <span aria-hidden="true" className="text-border">
+              /
+            </span>
+            <span className="uppercase tracking-wide">{post.readingTime}</span>
           </div>
         </div>
 
@@ -132,7 +144,7 @@ export default async function BlogPostPage({
               style={{ backgroundImage: frameGradient(post.color) }}
             >
               {post.thumbnail ? (
-                <div className="relative size-full overflow-hidden rounded-lg">
+                <div className="relative size-full overflow-hidden rounded-lg border border-black/25 shadow-sm">
                   <Image src={post.thumbnail} alt={post.title} fill priority className="object-cover" />
                 </div>
               ) : (
@@ -190,6 +202,7 @@ export default async function BlogPostPage({
                       href={`/features/${feature.slug}`}
                       color={feature.color}
                       icon={featureIcon}
+                      image={feature.thumbnail}
                       eyebrow="Feature"
                       title={feature.title}
                       description={feature.description}

@@ -12,7 +12,7 @@ import { FEATURE_LIST } from "@/lib/features-data";
 
 const title = "Features";
 const description =
-  "Multi-account platform connections, an AI content transformation engine, BYOK, visual workflows, and auto-generated backlinks — how OnBoostify turns one post into a full launch push.";
+  "Multi-account platform connections, an AI transformation engine, BYOK, visual workflows, and auto-generated backlinks, in one place.";
 
 export const metadata: Metadata = pageMetadata({
   title,
@@ -52,6 +52,7 @@ export default function FeaturesPage() {
                 key={feature.slug}
                 href={`/features/${feature.slug}`}
                 color={feature.color}
+                image={feature.thumbnail}
                 title={feature.title}
                 description={feature.description}
                 cta="Read more"

@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/seo/json-ld";
-import { breadcrumbJsonLd, organizationJsonLd } from "@/lib/seo/jsonld";
+import { breadcrumbJsonLd, webPageJsonLd } from "@/lib/seo/jsonld";
 import { pageMetadata } from "@/lib/seo/metadata";
 
+const title = "About";
+const description =
+  "OnBoostify was built because launching something well shouldn't mean rewriting the same update six times. Here's why, and how we think about the product.";
+
 export const metadata: Metadata = pageMetadata({
-  title: "About",
-  description:
-    "OnBoostify was built because launching something well shouldn't mean rewriting the same update six times. Here's why we're building it and how we think about the product.",
+  title,
+  description,
   path: "/about",
 });
 
@@ -15,7 +18,7 @@ export default function AboutPage() {
     <>
       <JsonLd
         data={[
-          organizationJsonLd(),
+          webPageJsonLd({ title, description, path: "/about" }),
           breadcrumbJsonLd([
             { name: "Home", path: "/" },
             { name: "About", path: "/about" },
