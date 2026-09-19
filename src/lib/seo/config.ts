@@ -21,7 +21,7 @@ export const siteConfig = {
     "bring your own AI key",
   ],
   company: "Baraklabs",
-  contactEmail: "info@baraklabs.com",
+  contactEmail: "info@oyeboost.com",
   links: {
     x: "https://x.com/baraklabs",
     linkedin: "https://www.linkedin.com/company/baraklabs",

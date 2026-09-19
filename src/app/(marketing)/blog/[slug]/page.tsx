@@ -149,7 +149,14 @@ export default async function BlogPostPage({
             >
               {post.thumbnail ? (
                 <div className="relative size-full overflow-hidden rounded-lg border border-black/25 shadow-sm">
-                  <Image src={post.thumbnail} alt={post.title} fill priority className="object-cover" />
+                  <Image
+                    src={post.thumbnail}
+                    alt={post.title}
+                    fill
+                    priority
+                    sizes="(min-width: 768px) 768px, 100vw"
+                    className="object-cover"
+                  />
                 </div>
               ) : (
                 <div className="flex size-full items-center justify-center">

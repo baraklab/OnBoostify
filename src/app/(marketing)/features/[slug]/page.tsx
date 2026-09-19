@@ -99,7 +99,14 @@ export default async function FeatureDetailPage({
           <div className="min-w-0 max-w-3xl">
             {feature.thumbnail ? (
               <div className="relative aspect-[16/7] w-full overflow-hidden rounded-lg border border-black/25 shadow-sm">
-                <Image src={feature.thumbnail} alt={feature.title} fill priority className="object-cover" />
+                <Image
+                  src={feature.thumbnail}
+                  alt={feature.title}
+                  fill
+                  priority
+                  sizes="(min-width: 768px) 768px, 100vw"
+                  className="object-cover"
+                />
               </div>
             ) : (
               <div

@@ -33,7 +33,13 @@ export function PromoCard({
     >
       {image ? (
         <div className="relative aspect-video w-full overflow-hidden">
-          <Image src={image} alt={title} fill className="object-cover" />
+          <Image
+            src={image}
+            alt={title}
+            fill
+            sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+            className="object-cover"
+          />
         </div>
       ) : (
         <div
