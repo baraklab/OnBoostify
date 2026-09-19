@@ -6,7 +6,7 @@ import { SectionHeading } from "@/components/marketing/section-heading";
 import { WorkflowMap } from "@/components/marketing/workflow-map";
 import { SplitCard } from "@/components/marketing/split-card";
 import { JsonLd } from "@/components/seo/json-ld";
-import { breadcrumbJsonLd, webPageJsonLd } from "@/lib/seo/jsonld";
+import { breadcrumbJsonLd, itemListJsonLd, webPageJsonLd } from "@/lib/seo/jsonld";
 import { pageMetadata } from "@/lib/seo/metadata";
 import { FEATURE_LIST } from "@/lib/features-data";
 
@@ -26,7 +26,8 @@ export default function FeaturesPage() {
     <>
       <JsonLd
         data={[
-          webPageJsonLd({ title, description, path: "/features" }),
+          webPageJsonLd({ title, description, path: "/features", type: "CollectionPage" }),
+          itemListJsonLd(FEATURE_LIST.map((f) => ({ name: f.title, path: `/features/${f.slug}` }))),
           breadcrumbJsonLd([
             { name: "Home", path: "/" },
             { name: "Features", path: "/features" },

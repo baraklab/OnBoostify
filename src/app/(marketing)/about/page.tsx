@@ -18,7 +18,7 @@ export default function AboutPage() {
     <>
       <JsonLd
         data={[
-          webPageJsonLd({ title, description, path: "/about" }),
+          webPageJsonLd({ title, description, path: "/about", type: "AboutPage" }),
           breadcrumbJsonLd([
             { name: "Home", path: "/" },
             { name: "About", path: "/about" },

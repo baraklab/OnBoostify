@@ -47,6 +47,8 @@ export async function generateMetadata({
     publishedTime: post.date,
     modifiedTime: post.updatedAt ?? post.date,
     authors: [post.author],
+    section: post.category,
+    tags: post.tags,
   });
 }
 
@@ -78,6 +80,8 @@ export default async function BlogPostPage({
             author: post.author,
             publishedTime: post.date,
             modifiedTime: post.updatedAt ?? post.date,
+            section: post.category,
+            keywords: post.tags,
           }),
           breadcrumbJsonLd([
             { name: "Home", path: "/" },

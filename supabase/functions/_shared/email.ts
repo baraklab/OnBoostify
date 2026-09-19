@@ -4,9 +4,9 @@ const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 // Reuses the Baraklabs org's already-verified Doculigent sending domain in Resend (same
 // account as RESEND_API_KEY) until oyeboost.com has its own verified domain — override
 // with AUTH_FROM_EMAIL/HELLO_FROM_EMAIL secrets once that's set up.
-const AUTH_FROM_EMAIL = Deno.env.get("AUTH_FROM_EMAIL") ?? "Oyeboost <auth@mail.doculigent.com>";
-const HELLO_FROM_EMAIL = Deno.env.get("HELLO_FROM_EMAIL") ?? "Oyeboost <hello@mail.doculigent.com>";
-const REPLY_TO_EMAIL = Deno.env.get("REPLY_TO_EMAIL") ?? "info@baraklabs.com";
+const AUTH_FROM_EMAIL = Deno.env.get("AUTH_FROM_EMAIL") ?? "Oyeboost <auth@mail.oyeboost.com>";
+const HELLO_FROM_EMAIL = Deno.env.get("HELLO_FROM_EMAIL") ?? "Oyeboost <hello@mail.oyeboost.com>";
+const REPLY_TO_EMAIL = Deno.env.get("REPLY_TO_EMAIL") ?? "info@Oyeboost.com";
 const SITE_URL = siteUrl();
 
 /** Escapes text dropped into the HTML templates below — otp/name/email all ultimately come

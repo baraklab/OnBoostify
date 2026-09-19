@@ -11,6 +11,8 @@ interface PageMetadataInput {
   publishedTime?: string;
   modifiedTime?: string;
   authors?: string[];
+  section?: string;
+  tags?: string[];
   noIndex?: boolean;
 }
 
@@ -29,6 +31,8 @@ export function pageMetadata({
   publishedTime,
   modifiedTime,
   authors,
+  section,
+  tags,
   noIndex = false,
 }: PageMetadataInput): Metadata {
   const url = new URL(path, siteConfig.url).toString();
@@ -62,6 +66,8 @@ export function pageMetadata({
       publishedTime,
       modifiedTime,
       authors,
+      section,
+      tags,
     } as Metadata["openGraph"],
     twitter: {
       card: "summary_large_image",
@@ -69,6 +75,7 @@ export function pageMetadata({
       description,
       images: [ogImage],
       site: siteConfig.twitterHandle,
+      creator: siteConfig.twitterHandle,
     },
   };
 }

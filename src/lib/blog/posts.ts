@@ -33,7 +33,7 @@ export const blogPosts: BlogPost[] = [
       "How to Get Your First 10 Paying Users: A Step-by-Step Playbook for B2B and B2C SaaS Founders",
     description:
       "Why the first ten matter more than the next ten thousand - and exactly how to find them.",
-    author: "Baraklabs Team",
+    author: "Oyeboost Team",
     date: "2026-09-11",
     color: "#1d4ed8",
     category: "Growth",

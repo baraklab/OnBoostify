@@ -67,16 +67,60 @@ export function softwareApplicationJsonLd() {
   };
 }
 
-export function webPageJsonLd(input: { title: string; description: string; path: string }) {
+type WebPageType = "WebPage" | "AboutPage" | "ContactPage" | "CollectionPage";
+
+export function webPageJsonLd(input: {
+  title: string;
+  description: string;
+  path: string;
+  type?: WebPageType;
+  /** Set on detail pages so answer engines can tie the page to the entity it describes. */
+  about?: object;
+}) {
   return {
     "@context": "https://schema.org",
-    "@type": "WebPage",
+    "@type": input.type ?? "WebPage",
     name: input.title,
     description: input.description,
     url: absoluteUrl(input.path),
     inLanguage: "en",
     isPartOf: { "@id": WEBSITE_ID },
     publisher: { "@id": ORG_ID },
+    ...(input.about ? { about: input.about } : {}),
+  };
+}
+
+/** An ordered list of pages, for index/collection pages (blog, features, platforms). */
+export function itemListJsonLd(items: { name: string; path: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      url: absoluteUrl(item.path),
+    })),
+  };
+}
+
+/** One priced Offer per plan, attached to the product so pricing shows up in rich results and AI answers. */
+export function pricingJsonLd(plans: { name: string; price: string; description: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: siteConfig.name,
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web",
+    url: absoluteUrl("/pricing"),
+    offers: plans.map((plan) => ({
+      "@type": "Offer",
+      name: plan.name,
+      description: plan.description,
+      price: plan.price.replace(/[^0-9.]/g, "") || "0",
+      priceCurrency: "USD",
+      url: absoluteUrl("/pricing"),
+    })),
   };
 }
 
@@ -116,6 +160,8 @@ export function articleJsonLd(input: {
   author: string;
   publishedTime: string;
   modifiedTime: string;
+  section?: string;
+  keywords?: string[];
 }) {
   return {
     "@context": "https://schema.org",
@@ -129,6 +175,8 @@ export function articleJsonLd(input: {
     publisher: { "@id": ORG_ID },
     isPartOf: { "@id": WEBSITE_ID },
     inLanguage: "en",
+    ...(input.section ? { articleSection: input.section } : {}),
+    ...(input.keywords?.length ? { keywords: input.keywords.join(", ") } : {}),
     datePublished: input.publishedTime,
     dateModified: input.modifiedTime,
     mainEntityOfPage: { "@type": "WebPage", "@id": absoluteUrl(input.path) },

@@ -10,6 +10,7 @@ import { PromoCard } from "@/components/marketing/promo-card";
 import { PostSidebar } from "@/components/marketing/post-sidebar";
 import { JsonLd } from "@/components/seo/json-ld";
 import { breadcrumbJsonLd, faqJsonLd, webPageJsonLd } from "@/lib/seo/jsonld";
+import { siteConfig } from "@/lib/seo/config";
 import { pageMetadata } from "@/lib/seo/metadata";
 import { frameGradient } from "@/lib/color";
 import { renderInlineMarkdown } from "@/lib/inline-markdown";
@@ -68,6 +69,7 @@ export default async function FeatureDetailPage({
             title: feature.title,
             description: feature.description,
             path: `/features/${feature.slug}`,
+            about: { "@type": "SoftwareApplication", name: siteConfig.name, url: siteConfig.url },
           }),
           breadcrumbJsonLd([
             { name: "Home", path: "/" },

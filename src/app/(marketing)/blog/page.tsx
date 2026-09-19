@@ -3,7 +3,7 @@ import { blogPosts } from "@/lib/blog/posts";
 import { formatDate } from "@/lib/utils";
 import { pageMetadata } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/json-ld";
-import { breadcrumbJsonLd, webPageJsonLd } from "@/lib/seo/jsonld";
+import { breadcrumbJsonLd, itemListJsonLd, webPageJsonLd } from "@/lib/seo/jsonld";
 import { SplitCard } from "@/components/marketing/split-card";
 
 const title = "Blog";
@@ -22,7 +22,8 @@ export default function BlogIndexPage() {
     <>
       <JsonLd
         data={[
-          webPageJsonLd({ title, description, path: "/blog" }),
+          webPageJsonLd({ title, description, path: "/blog", type: "CollectionPage" }),
+          itemListJsonLd(blogPosts.map((p) => ({ name: p.title, path: `/blog/${p.slug}` }))),
           breadcrumbJsonLd([
             { name: "Home", path: "/" },
             { name: "Blog", path: "/blog" },

@@ -4,7 +4,7 @@ import { Check, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { JsonLd } from "@/components/seo/json-ld";
-import { breadcrumbJsonLd, faqJsonLd } from "@/lib/seo/jsonld";
+import { breadcrumbJsonLd, faqJsonLd, pricingJsonLd } from "@/lib/seo/jsonld";
 import { pageMetadata } from "@/lib/seo/metadata";
 
 export const metadata: Metadata = pageMetadata({
@@ -92,6 +92,7 @@ export default function PricingPage() {
             { name: "Home", path: "/" },
             { name: "Pricing", path: "/pricing" },
           ]),
+          pricingJsonLd(plans),
           faqJsonLd(faqs),
         ]}
       />

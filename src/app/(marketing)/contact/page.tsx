@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Mail } from "lucide-react";
 import { ContactForm } from "./contact-form";
 import { JsonLd } from "@/components/seo/json-ld";
-import { breadcrumbJsonLd } from "@/lib/seo/jsonld";
+import { breadcrumbJsonLd, webPageJsonLd } from "@/lib/seo/jsonld";
 import { pageMetadata } from "@/lib/seo/metadata";
 import { siteConfig } from "@/lib/seo/config";
 
@@ -16,10 +16,18 @@ export default function ContactPage() {
   return (
     <section className="border-b border-border">
       <JsonLd
-        data={breadcrumbJsonLd([
-          { name: "Home", path: "/" },
-          { name: "Contact", path: "/contact" },
-        ])}
+        data={[
+          webPageJsonLd({
+            title: "Contact",
+            description: "Get in touch with the Oyeboost team.",
+            path: "/contact",
+            type: "ContactPage",
+          }),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Contact", path: "/contact" },
+          ]),
+        ]}
       />
       <div className="mx-auto grid max-w-4xl gap-10 px-6 py-16 sm:py-20 md:grid-cols-2">
         <div>

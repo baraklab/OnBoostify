@@ -16,10 +16,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/faq",
     "/privacy",
     "/terms",
-    "/login",
   ].map((path) => ({
     url: `${siteConfig.url}${path}`,
-    lastModified: new Date(),
     changeFrequency: "weekly" as const,
     priority: path === "" ? 1 : 0.7,
   }));
@@ -33,7 +31,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const featureRoutes = FEATURE_LIST.map((feature) => ({
     url: `${siteConfig.url}/features/${feature.slug}`,
-    lastModified: new Date(),
     changeFrequency: "monthly" as const,
     priority: 0.6,
   }));
