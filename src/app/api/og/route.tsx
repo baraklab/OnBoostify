@@ -1,8 +1,12 @@
 import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { siteConfig } from "@/lib/seo/config";
 
 export async function GET(request: NextRequest) {
+  const logoBytes = await readFile(path.join(process.cwd(), "src/app/icon.png"));
+  const logoMark = `data:image/png;base64,${logoBytes.toString("base64")}`;
   const { searchParams } = new URL(request.url);
   const title = (searchParams.get("title") ?? `${siteConfig.name} — ${siteConfig.tagline}`).slice(0, 120);
   const eyebrow = (searchParams.get("eyebrow") ?? siteConfig.name).slice(0, 40);
@@ -23,27 +27,8 @@ export async function GET(request: NextRequest) {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <div
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: 10,
-              backgroundColor: "#14141A",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <div
-              style={{
-                width: 0,
-                height: 0,
-                borderLeft: "9px solid transparent",
-                borderRight: "9px solid transparent",
-                borderBottom: "14px solid #FF5A1F",
-              }}
-            />
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={logoMark} alt="" width={44} height={44} />
           <span
             style={{
               fontSize: 26,
