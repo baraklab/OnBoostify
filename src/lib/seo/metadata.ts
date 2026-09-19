@@ -57,7 +57,7 @@ export function pageMetadata({
       url,
       siteName: siteConfig.name,
       images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
-      locale: "en_US",
+      locale: siteConfig.locale,
       type,
       publishedTime,
       modifiedTime,

@@ -19,7 +19,7 @@ export default async function NotificationsPage() {
   return (
     <div>
       <h2 className="font-heading text-base font-semibold text-foreground">Notifications</h2>
-      <p className="mt-1 text-sm text-muted-foreground">Choose what OnBoostify emails you about.</p>
+      <p className="mt-1 text-sm text-muted-foreground">Choose what Oyeboost emails you about.</p>
       <div className="mt-6">
         <NotificationsForm
           preferences={

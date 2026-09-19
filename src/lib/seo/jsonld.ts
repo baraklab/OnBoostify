@@ -1,13 +1,31 @@
 import { siteConfig } from "./config";
+import { FEATURE_LIST } from "@/lib/features-data";
 import { absoluteUrl } from "./metadata";
+
+const ORG_ID = `${siteConfig.url}/#organization`;
+const WEBSITE_ID = `${siteConfig.url}/#website`;
 
 export function organizationJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
+    "@id": ORG_ID,
     name: siteConfig.name,
+    alternateName: siteConfig.company,
     url: siteConfig.url,
-    logo: absoluteUrl("/icon-mark.png"),
+    description: siteConfig.description,
+    logo: {
+      "@type": "ImageObject",
+      url: absoluteUrl("/icon-mark.png"),
+    },
+    email: siteConfig.contactEmail,
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "customer support",
+      email: siteConfig.contactEmail,
+      url: absoluteUrl("/contact"),
+    },
+    parentOrganization: { "@type": "Organization", name: siteConfig.company },
     sameAs: [siteConfig.links.x, siteConfig.links.linkedin, siteConfig.links.youtube],
   };
 }
@@ -16,13 +34,13 @@ export function websiteJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": WEBSITE_ID,
     name: siteConfig.name,
+    alternateName: `${siteConfig.name} — ${siteConfig.tagline}`,
     url: siteConfig.url,
-    potentialAction: {
-      "@type": "SearchAction",
-      target: `${siteConfig.url}/blog?q={search_term_string}`,
-      "query-input": "required name=search_term_string",
-    },
+    description: siteConfig.description,
+    inLanguage: "en",
+    publisher: { "@id": ORG_ID },
   };
 }
 
@@ -30,11 +48,16 @@ export function softwareApplicationJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
+    "@id": `${siteConfig.url}/#software`,
     name: siteConfig.name,
     applicationCategory: "BusinessApplication",
+    applicationSubCategory: "Social media automation and content repurposing",
     operatingSystem: "Web",
     description: siteConfig.description,
     url: siteConfig.url,
+    image: absoluteUrl("/icon-mark.png"),
+    featureList: FEATURE_LIST.map((feature) => feature.title),
+    publisher: { "@id": ORG_ID },
     offers: {
       "@type": "Offer",
       price: "0",
@@ -51,6 +74,9 @@ export function webPageJsonLd(input: { title: string; description: string; path:
     name: input.title,
     description: input.description,
     url: absoluteUrl(input.path),
+    inLanguage: "en",
+    isPartOf: { "@id": WEBSITE_ID },
+    publisher: { "@id": ORG_ID },
   };
 }
 
@@ -97,20 +123,14 @@ export function articleJsonLd(input: {
     headline: input.title,
     description: input.description,
     image: [absoluteUrl(input.image)],
-    author: {
-      "@type": "Person",
-      name: input.author,
-    },
-    publisher: {
-      "@type": "Organization",
-      name: siteConfig.name,
-      logo: {
-        "@type": "ImageObject",
-        url: absoluteUrl("/icon-mark.png"),
-      },
-    },
+    author: /team/i.test(input.author)
+      ? { "@type": "Organization", name: siteConfig.name, url: siteConfig.url }
+      : { "@type": "Person", name: input.author },
+    publisher: { "@id": ORG_ID },
+    isPartOf: { "@id": WEBSITE_ID },
+    inLanguage: "en",
     datePublished: input.publishedTime,
     dateModified: input.modifiedTime,
-    mainEntityOfPage: absoluteUrl(input.path),
+    mainEntityOfPage: { "@type": "WebPage", "@id": absoluteUrl(input.path) },
   };
 }

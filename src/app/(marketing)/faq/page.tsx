@@ -6,7 +6,7 @@ import { breadcrumbJsonLd, faqJsonLd } from "@/lib/seo/jsonld";
 
 export const metadata: Metadata = pageMetadata({
   title: "FAQ",
-  description: "Common questions about how OnBoostify generates, reviews, and publishes content.",
+  description: "Common questions about how Oyeboost generates, reviews, and publishes content.",
   path: "/faq",
 });
 

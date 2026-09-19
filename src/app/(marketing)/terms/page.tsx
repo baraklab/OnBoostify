@@ -3,18 +3,18 @@ import { pageMetadata } from "@/lib/seo/metadata";
 
 export const metadata: Metadata = pageMetadata({
   title: "Terms of Service",
-  description: "The terms governing your use of OnBoostify.",
+  description: "The terms governing your use of Oyeboost.",
   path: "/terms",
 });
 
 const sections = [
   {
-    title: "Using OnBoostify",
+    title: "Using Oyeboost",
     body: "You must have the right to publish content to any account you connect. You're responsible for what you approve and publish through the product, including compliance with each connected platform's own terms of service.",
   },
   {
     title: "AI-generated content",
-    body: "Content generated using an AI provider you configure is a draft, not a guarantee of accuracy or platform compliance. Review generated content before publishing — OnBoostify doesn't verify claims, facts, or figures produced by the AI provider.",
+    body: "Content generated using an AI provider you configure is a draft, not a guarantee of accuracy or platform compliance. Review generated content before publishing — Oyeboost doesn't verify claims, facts, or figures produced by the AI provider.",
   },
   {
     title: "Bring Your Own Key",
@@ -22,7 +22,7 @@ const sections = [
   },
   {
     title: "Platform integrations",
-    body: "Publishing capabilities depend on what each platform's public API supports. Where a platform doesn't support a capability (for example, scheduling or analytics), OnBoostify will say so rather than simulate it.",
+    body: "Publishing capabilities depend on what each platform's public API supports. Where a platform doesn't support a capability (for example, scheduling or analytics), Oyeboost will say so rather than simulate it.",
   },
   {
     title: "Account termination",

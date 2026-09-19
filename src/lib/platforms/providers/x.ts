@@ -24,7 +24,7 @@ export const xProvider: PlatformProvider = {
       analytics: true,
     },
     limitations:
-      "Scheduling happens inside OnBoostify, not on X's servers — posts are queued and published at the scheduled time by our worker. Analytics require the connected account to have API read access under your X developer tier.",
+      "Scheduling happens inside Oyeboost, not on X's servers — posts are queued and published at the scheduled time by our worker. Analytics require the connected account to have API read access under your X developer tier.",
   },
 
   getOAuthUrl(state, redirectUri) {

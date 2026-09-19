@@ -3,7 +3,7 @@ import type { PlatformProvider } from "../types";
 /**
  * Substack has no public publishing API. "Connecting" a Substack account
  * only stores the newsletter URL for backlink attribution and export
- * formatting — OnBoostify cannot publish, schedule, or read analytics
+ * formatting — Oyeboost cannot publish, schedule, or read analytics
  * for Substack, and the UI must not imply otherwise.
  */
 export const substackProvider: PlatformProvider = {
@@ -22,6 +22,6 @@ export const substackProvider: PlatformProvider = {
       analytics: false,
     },
     limitations:
-      "Substack does not offer a public API. OnBoostify generates a newsletter-formatted draft you copy into Substack's editor yourself — direct publishing and scheduling aren't possible for this platform.",
+      "Substack does not offer a public API. Oyeboost generates a newsletter-formatted draft you copy into Substack's editor yourself — direct publishing and scheduling aren't possible for this platform.",
   },
 };

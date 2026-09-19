@@ -8,7 +8,7 @@ import { siteConfig } from "@/lib/seo/config";
 
 export const metadata: Metadata = pageMetadata({
   title: "Contact",
-  description: "Get in touch with the OnBoostify team — questions, feedback, or partnership inquiries.",
+  description: "Get in touch with the Oyeboost team — questions, feedback, or partnership inquiries.",
   path: "/contact",
 });
 

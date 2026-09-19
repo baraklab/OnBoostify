@@ -1,6 +1,6 @@
-export const STORAGE_KEY = "onboostify-cookie-consent";
-const OPEN_SETTINGS_EVENT = "onboostify:open-cookie-settings";
-const CONSENT_CHANGED_EVENT = "onboostify:consent-changed";
+export const STORAGE_KEY = "oyeboost-cookie-consent";
+const OPEN_SETTINGS_EVENT = "oyeboost:open-cookie-settings";
+const CONSENT_CHANGED_EVENT = "oyeboost:consent-changed";
 
 export interface CookieConsent {
   necessary: true;

@@ -33,7 +33,7 @@ export default async function DashboardNetworkPage() {
     <div className="flex flex-col gap-8">
       <PageHeader
         title="Network"
-        description="Get discovered by other OnBoostify users looking to amplify a launch."
+        description="Get discovered by other Oyeboost users looking to amplify a launch."
       />
 
       <div className="grid gap-6 lg:grid-cols-2">

@@ -6,7 +6,7 @@ import { pageMetadata } from "@/lib/seo/metadata";
 export const metadata: Metadata = pageMetadata({
   title: "Privacy Policy",
   description:
-    "How OnBoostify collects, uses, and protects your data, including OAuth tokens, AI provider keys, and cookies.",
+    "How Oyeboost collects, uses, and protects your data, including OAuth tokens, AI provider keys, and cookies.",
   path: "/privacy",
 });
 
@@ -25,7 +25,7 @@ const sections = [
   },
   {
     title: "Third-party platforms",
-    body: "When you connect X, LinkedIn, Medium, or Substack, those platforms' own privacy policies also apply to data you share with them. Disconnecting an account in OnBoostify revokes our stored token but does not automatically revoke authorization on the platform's side — do that from the platform's own app settings if needed.",
+    body: "When you connect X, LinkedIn, Medium, or Substack, those platforms' own privacy policies also apply to data you share with them. Disconnecting an account in Oyeboost revokes our stored token but does not automatically revoke authorization on the platform's side — do that from the platform's own app settings if needed.",
   },
   {
     title: "Data retention",
@@ -47,13 +47,13 @@ const cookieCategories = [
   {
     name: "Analytics",
     detail:
-      "Would help us understand usage. OnBoostify doesn't currently load any analytics scripts, so choosing to allow this has no effect yet — your preference is saved for if that changes.",
+      "Would help us understand usage. Oyeboost doesn't currently load any analytics scripts, so choosing to allow this has no effect yet — your preference is saved for if that changes.",
     canDisable: true,
   },
   {
     name: "Marketing",
     detail:
-      "Would measure ads and campaigns. OnBoostify doesn't currently load any marketing or advertising scripts, so choosing to allow this has no effect yet — your preference is saved for if that changes.",
+      "Would measure ads and campaigns. Oyeboost doesn't currently load any marketing or advertising scripts, so choosing to allow this has no effect yet — your preference is saved for if that changes.",
     canDisable: true,
   },
 ];

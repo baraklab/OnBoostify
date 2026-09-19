@@ -20,7 +20,7 @@ export default async function ContentPreferencesPage() {
     <div>
       <h2 className="font-heading text-base font-semibold text-foreground">Content preferences</h2>
       <p className="mt-1 text-sm text-muted-foreground">
-        Reusable tone and brand voice settings applied when OnBoostify generates content for you.
+        Reusable tone and brand voice settings applied when Oyeboost generates content for you.
       </p>
       <div className="mt-6">
         <ProfileList profiles={profiles ?? []} />

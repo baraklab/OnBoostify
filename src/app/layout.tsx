@@ -36,12 +36,17 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
+  applicationName: siteConfig.name,
   keywords: [...siteConfig.keywords],
+  authors: [{ name: siteConfig.company, url: siteConfig.links.x }],
+  creator: siteConfig.company,
+  publisher: siteConfig.company,
+  category: "technology",
+  formatDetection: { email: false, address: false, telephone: false },
   ...pageMetadata({
     title: `${siteConfig.name} — ${siteConfig.tagline}`,
     description: siteConfig.description,
     path: "/",
-    image: "/og/home.png",
   }),
 };
 

@@ -17,9 +17,11 @@ export async function GET() {
     "",
     `> ${siteConfig.description}`,
     "",
+    `${siteConfig.name} is built by ${siteConfig.company} for SaaS founders, indie hackers, and small marketing teams. It runs on the customer's own OpenAI, Anthropic, or OpenRouter API key (no AI token markup). Full plain-text content: ${siteConfig.url}/llms-full.txt`,
+    "",
     "## Product",
-    `- [Features](${siteConfig.url}/features): Every feature in OnBoostify — content transformation, content profiles, bring-your-own-AI-key, multiple accounts per platform, auto-generated backlinks, workflows, approval controls, and quick edits.`,
-    `- [Platforms](${siteConfig.url}/platforms): Where OnBoostify publishes today and what's coming next.`,
+    `- [Features](${siteConfig.url}/features): Every feature in Oyeboost — content transformation, content profiles, bring-your-own-AI-key, multiple accounts per platform, auto-generated backlinks, workflows, approval controls, and quick edits.`,
+    `- [Platforms](${siteConfig.url}/platforms): Where Oyeboost publishes today and what's coming next.`,
     `- [Pricing](${siteConfig.url}/pricing): Plans and limits.`,
     `- [Network](${siteConfig.url}/network): Directory of influencers, creators, and communities that can amplify a launch.`,
     "",
@@ -43,12 +45,14 @@ export async function GET() {
     "## Feeds",
     `- [RSS feed](${siteConfig.url}/feed.xml)`,
     `- [Sitemap](${siteConfig.url}/sitemap.xml)`,
+    `- [Full content for LLMs](${siteConfig.url}/llms-full.txt)`,
     "",
   ];
 
   return new Response(lines.join("\n"), {
     headers: {
       "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "public, max-age=3600, s-maxage=86400",
     },
   });
 }

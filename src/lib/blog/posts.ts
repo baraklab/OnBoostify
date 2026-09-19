@@ -635,8 +635,8 @@ export const blogPosts: BlogPost[] = [
     slug: "one-post-should-not-mean-six-rewrites",
     title: "One post shouldn't mean six rewrites",
     description:
-      "Why we built OnBoostify around adapting content per platform instead of duplicating it, and what 'platform-native' actually means in practice.",
-    author: "OnBoostify Team",
+      "Why we built Oyeboost around adapting content per platform instead of duplicating it, and what 'platform-native' actually means in practice.",
+    author: "Oyeboost Team",
     date: "2026-06-02",
     color: "#4f46e5",
     category: "Product",
@@ -647,7 +647,7 @@ export const blogPosts: BlogPost[] = [
       {
         type: "text",
         content:
-          "Most founders we talked to before building OnBoostify described the same routine on launch day: write the X post, then open LinkedIn and rewrite it to sound more professional, then open Medium and expand it into something longer, then open Substack and reformat it again for a newsletter audience. Same idea, four rewrites, forty-five minutes gone before the actual launch even starts.",
+          "Most founders we talked to before building Oyeboost described the same routine on launch day: write the X post, then open LinkedIn and rewrite it to sound more professional, then open Medium and expand it into something longer, then open Substack and reformat it again for a newsletter audience. Same idea, four rewrites, forty-five minutes gone before the actual launch even starts.",
       },
       {
         type: "heading",
@@ -674,7 +674,7 @@ export const blogPosts: BlogPost[] = [
           "Each destination gets a version restructured for its format: length, headings, tone.",
           "You review and edit every version before it goes anywhere.",
           "Your content profile (tone, audience, brand voice) applies consistently across all of them.",
-          "Don't want to write the source yourself either? Give it a one-shot prompt — a launch note, a link, a rough idea — and let OnBoostify draft that first version for you.",
+          "Don't want to write the source yourself either? Give it a one-shot prompt — a launch note, a link, a rough idea — and let Oyeboost draft that first version for you.",
         ],
       },
       {
@@ -685,7 +685,7 @@ export const blogPosts: BlogPost[] = [
       {
         type: "text",
         content:
-          "That's the whole premise of OnBoostify: publish once, let the platform adaptation do the rewriting, and spend the time you saved actually talking to the people who respond.",
+          "That's the whole premise of Oyeboost: publish once, let the platform adaptation do the rewriting, and spend the time you saved actually talking to the people who respond.",
       },
       {
         type: "heading",
@@ -697,7 +697,7 @@ export const blogPosts: BlogPost[] = [
           {
             question: "How do I post the same update to LinkedIn, X, and Medium without rewriting it every time?",
             answer:
-              "Write it once as a source post, then use a tool that rewrites it per platform instead of duplicating the text — a tight hook for X, more context for LinkedIn, headings and structure for Medium. That's what OnBoostify's transformation engine does automatically.",
+              "Write it once as a source post, then use a tool that rewrites it per platform instead of duplicating the text — a tight hook for X, more context for LinkedIn, headings and structure for Medium. That's what Oyeboost's transformation engine does automatically.",
           },
           {
             question: "Is it bad to post identical text on every social platform?",
@@ -722,8 +722,8 @@ export const blogPosts: BlogPost[] = [
   slug: "how-to-automatically-post-from-x-linkedin-to-multiple-platforms",
   title: "How to Automatically Post from X and LinkedIn to Multiple Platforms",
   description:
-    "Learn how to turn one post into platform-native content and automatically publish it across X, LinkedIn, and other social platforms with OnBoostify.",
-  author: "OnBoostify Team",
+    "Learn how to turn one post into platform-native content and automatically publish it across X, LinkedIn, and other social platforms with Oyeboost.",
+  author: "Oyeboost Team",
   date: "2026-05-21",
   color: "#0284c7",
   category: "Growth",
@@ -741,7 +741,7 @@ export const blogPosts: BlogPost[] = [
     {
       type: "text",
       content:
-        "**The short answer:** you automatically post from X and LinkedIn to multiple platforms by writing your update once, letting a content-repurposing tool rewrite it into a platform-native version for each destination, then publishing all of those versions from a single dashboard instead of retyping the post everywhere by hand. [OnBoostify](/) does exactly this — connect your accounts, write one source post, and it generates and schedules the X, LinkedIn, Medium, and Substack versions for you.",
+        "**The short answer:** you automatically post from X and LinkedIn to multiple platforms by writing your update once, letting a content-repurposing tool rewrite it into a platform-native version for each destination, then publishing all of those versions from a single dashboard instead of retyping the post everywhere by hand. [Oyeboost](/) does exactly this — connect your accounts, write one source post, and it generates and schedules the X, LinkedIn, Medium, and Substack versions for you.",
     },
     {
       type: "text",
@@ -766,7 +766,7 @@ export const blogPosts: BlogPost[] = [
       type: "list",
       items: [
         "**Duplicate cross-posting** — the same exact text (and hashtags) is blasted to every platform. Fast, but a 280-character X hook looks lazy on LinkedIn, and a casual tweet pasted into a newsletter has no structure.",
-        "**Platform-native automation** — the source idea is rewritten into a version shaped for each platform's format, length, and tone, then published automatically. This is what OnBoostify's [content transformation engine](/features/content-transformation-engine) does.",
+        "**Platform-native automation** — the source idea is rewritten into a version shaped for each platform's format, length, and tone, then published automatically. This is what Oyeboost's [content transformation engine](/features/content-transformation-engine) does.",
       ],
     },
     {
@@ -851,7 +851,7 @@ export const blogPosts: BlogPost[] = [
     {
       type: "text",
       content:
-        "OnBoostify doesn't resell AI tokens. Every rewrite runs on your own [OpenAI, Anthropic, or OpenRouter API key](/features/bring-your-own-ai-key), connected once under Settings → AI Providers, so you're billed directly by your provider at their rates and can pick whichever model fits your budget and quality bar.",
+        "Oyeboost doesn't resell AI tokens. Every rewrite runs on your own [OpenAI, Anthropic, or OpenRouter API key](/features/bring-your-own-ai-key), connected once under Settings → AI Providers, so you're billed directly by your provider at their rates and can pick whichever model fits your budget and quality bar.",
     },
     {
       type: "list",
@@ -885,12 +885,12 @@ export const blogPosts: BlogPost[] = [
     { type: "newsletter" },
     {
       type: "heading",
-      content: "Where OnBoostify fits — and who it's for",
+      content: "Where Oyeboost fits — and who it's for",
     },
     {
       type: "text",
       content:
-        "OnBoostify is a social media automation and content-repurposing platform built for SaaS founders, indie hackers, and small marketing teams who need to show up consistently on X and LinkedIn without spending an hour rewriting the same update for every platform. A few situations where teams turn it on:",
+        "Oyeboost is a social media automation and content-repurposing platform built for SaaS founders, indie hackers, and small marketing teams who need to show up consistently on X and LinkedIn without spending an hour rewriting the same update for every platform. A few situations where teams turn it on:",
     },
     {
       type: "list",
@@ -917,12 +917,12 @@ export const blogPosts: BlogPost[] = [
         {
           question: "Can I automatically post the same content to X and LinkedIn?",
           answer:
-            "Yes, but publishing identical text on both usually underperforms. OnBoostify takes one source post and generates a short, hook-driven version for X and a longer, context-rich version for LinkedIn, then publishes both automatically from the same workflow.",
+            "Yes, but publishing identical text on both usually underperforms. Oyeboost takes one source post and generates a short, hook-driven version for X and a longer, context-rich version for LinkedIn, then publishes both automatically from the same workflow.",
         },
         {
           question: "What's the difference between cross-posting and social media posting automation?",
           answer:
-            "Cross-posting typically means copying the same text to every platform. Posting automation, as OnBoostify implements it, rewrites the source post into a platform-native version for each destination before publishing, so the format fits the platform instead of just duplicating text.",
+            "Cross-posting typically means copying the same text to every platform. Posting automation, as Oyeboost implements it, rewrites the source post into a platform-native version for each destination before publishing, so the format fits the platform instead of just duplicating text.",
         },
         {
           question: "Does automating my posts hurt engagement compared to posting manually?",
@@ -930,9 +930,9 @@ export const blogPosts: BlogPost[] = [
             "Not when the automation adapts content per platform instead of duplicating it. Engagement typically drops when the same generic text is blasted everywhere — not because the post was automated, but because it wasn't shaped for the platform it landed on.",
         },
         {
-          question: "Which platforms can I publish to automatically with OnBoostify?",
+          question: "Which platforms can I publish to automatically with Oyeboost?",
           answer:
-            "OnBoostify currently supports X, LinkedIn, Medium, and Substack, with support for multiple accounts per platform, so you can publish from a personal profile and a company page in the same workflow.",
+            "Oyeboost currently supports X, LinkedIn, Medium, and Substack, with support for multiple accounts per platform, so you can publish from a personal profile and a company page in the same workflow.",
         },
         {
           question: "Is social media automation worth it for a solo founder?",
@@ -942,7 +942,7 @@ export const blogPosts: BlogPost[] = [
         {
           question: "Do I need my own OpenAI or Anthropic API key?",
           answer:
-            "Yes — OnBoostify runs on your own OpenAI, Anthropic, or OpenRouter API key rather than reselling AI tokens. You connect it once under Settings → AI Providers; it's encrypted at rest and only decrypted server-side when a generation actually runs.",
+            "Yes — Oyeboost runs on your own OpenAI, Anthropic, or OpenRouter API key rather than reselling AI tokens. You connect it once under Settings → AI Providers; it's encrypted at rest and only decrypted server-side when a generation actually runs.",
         },
       ],
     },
@@ -953,7 +953,7 @@ export const blogPosts: BlogPost[] = [
     title: "Backlinks without being spammy",
     description:
       "Auto-generated content that links back to your launch only works if it reads like something a person actually wanted to write. Here's how we approach it.",
-    author: "OnBoostify Team",
+    author: "Oyeboost Team",
     date: "2026-04-22",
     color: "#059669",
     category: "Marketing",

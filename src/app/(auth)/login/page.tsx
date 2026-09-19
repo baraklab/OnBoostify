@@ -4,7 +4,7 @@ import { pageMetadata } from "@/lib/seo/metadata";
 
 export const metadata: Metadata = pageMetadata({
   title: "Log in",
-  description: "Log in to your OnBoostify account.",
+  description: "Log in to your Oyeboost account.",
   path: "/login",
   noIndex: true,
 });

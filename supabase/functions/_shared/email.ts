@@ -2,10 +2,10 @@ import { siteUrl } from "./site.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 // Reuses the Baraklabs org's already-verified Doculigent sending domain in Resend (same
-// account as RESEND_API_KEY) until onboostify.com has its own verified domain — override
+// account as RESEND_API_KEY) until oyeboost.com has its own verified domain — override
 // with AUTH_FROM_EMAIL/HELLO_FROM_EMAIL secrets once that's set up.
-const AUTH_FROM_EMAIL = Deno.env.get("AUTH_FROM_EMAIL") ?? "OnBoostify <auth@mail.doculigent.com>";
-const HELLO_FROM_EMAIL = Deno.env.get("HELLO_FROM_EMAIL") ?? "OnBoostify <hello@mail.doculigent.com>";
+const AUTH_FROM_EMAIL = Deno.env.get("AUTH_FROM_EMAIL") ?? "Oyeboost <auth@mail.doculigent.com>";
+const HELLO_FROM_EMAIL = Deno.env.get("HELLO_FROM_EMAIL") ?? "Oyeboost <hello@mail.doculigent.com>";
 const REPLY_TO_EMAIL = Deno.env.get("REPLY_TO_EMAIL") ?? "info@baraklabs.com";
 const SITE_URL = siteUrl();
 
@@ -30,7 +30,7 @@ function emailLayout(preheader: string, bodyHtml: string): string {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light" />
-    <title>OnBoostify</title>
+    <title>Oyeboost</title>
   </head>
   <body style="margin:0; padding:0; background-color:#f6f6f4; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
     <div style="display:none; max-height:0; overflow:hidden; opacity:0; mso-hide:all;">${preheader}</div>
@@ -40,7 +40,7 @@ function emailLayout(preheader: string, bodyHtml: string): string {
           <table role="presentation" width="480" cellpadding="0" cellspacing="0" style="width:480px; max-width:100%; background-color:#ffffff; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(20,20,26,0.08);">
             <tr>
               <td align="center" style="padding:32px 40px; background-color:#14141a;">
-                <span style="display:inline-block; vertical-align:middle; font-size:19px; font-weight:700; color:#ffffff; letter-spacing:-0.02em;">OnBoostify</span>
+                <span style="display:inline-block; vertical-align:middle; font-size:19px; font-weight:700; color:#ffffff; letter-spacing:-0.02em;">Oyeboost</span>
               </td>
             </tr>
             <tr>
@@ -51,7 +51,7 @@ function emailLayout(preheader: string, bodyHtml: string): string {
             <tr>
               <td style="padding:24px 40px 32px; border-top:1px solid #e5e5e0;">
                 <p style="margin:0; font-size:13px; line-height:20px; color:#6b6b66;">
-                  Sent by OnBoostify &middot; <a href="${SITE_URL}" style="color:#ff5a1f; text-decoration:none;">onboostify.com</a><br />
+                  Sent by Oyeboost &middot; <a href="${SITE_URL}" style="color:#ff5a1f; text-decoration:none;">oyeboost.com</a><br />
                   Questions? Just reply to this email — it reaches us directly.
                 </p>
               </td>
@@ -94,7 +94,7 @@ export async function sendOtpEmail(email: string, otp: string, verifyUrl: string
     `
       <p style="margin:0 0 8px; font-size:15px; line-height:24px; color:#14141a;">Hi,</p>
       <p style="margin:0 0 24px; font-size:15px; line-height:24px; color:#14141a;">
-        Enter this code to verify your email address and finish signing in to OnBoostify.
+        Enter this code to verify your email address and finish signing in to Oyeboost.
       </p>
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
         <tr>
@@ -125,9 +125,9 @@ export async function sendOtpEmail(email: string, otp: string, verifyUrl: string
   await sendEmail({
     from: AUTH_FROM_EMAIL,
     to: email,
-    subject: "Your OnBoostify verification code",
+    subject: "Your Oyeboost verification code",
     html,
-    text: `Your OnBoostify verification code is ${otp}.\n\nOr verify in one click: ${verifyUrl}\n\nThis code and link expire in 10 minutes. If you didn't request this, you can safely ignore this email.`,
+    text: `Your Oyeboost verification code is ${otp}.\n\nOr verify in one click: ${verifyUrl}\n\nThis code and link expire in 10 minutes. If you didn't request this, you can safely ignore this email.`,
   });
 }
 
@@ -149,7 +149,7 @@ export async function sendPasswordResetEmail(email: string, otp: string, resetUr
     `
       <p style="margin:0 0 8px; font-size:15px; line-height:24px; color:#14141a;">Hi,</p>
       <p style="margin:0 0 24px; font-size:15px; line-height:24px; color:#14141a;">
-        We received a request to reset your OnBoostify password. Enter this code on the reset screen:
+        We received a request to reset your Oyeboost password. Enter this code on the reset screen:
       </p>
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
         <tr>
@@ -180,9 +180,9 @@ export async function sendPasswordResetEmail(email: string, otp: string, resetUr
   await sendEmail({
     from: AUTH_FROM_EMAIL,
     to: email,
-    subject: "Reset your OnBoostify password",
+    subject: "Reset your Oyeboost password",
     html,
-    text: `Your OnBoostify password reset code is ${otp}.\n\nOr reset it in one click: ${resetUrl}\n\nThis code and link expire in 15 minutes. If you didn't request a password reset, you can safely ignore this email — your password won't change.`,
+    text: `Your Oyeboost password reset code is ${otp}.\n\nOr reset it in one click: ${resetUrl}\n\nThis code and link expire in 15 minutes. If you didn't request a password reset, you can safely ignore this email — your password won't change.`,
   });
 }
 
@@ -197,11 +197,11 @@ export async function sendWelcomeEmail(email: string, firstName?: string | null)
 
   const greetName = firstName ? escapeHtml(firstName) : null;
   const html = emailLayout(
-    "Welcome to OnBoostify — your account is ready to go.",
+    "Welcome to Oyeboost — your account is ready to go.",
     `
       <p style="margin:0 0 8px; font-size:15px; line-height:24px; color:#14141a;">${greetName ? `Hi ${greetName},` : "Hi,"}</p>
       <p style="margin:0 0 28px; font-size:15px; line-height:24px; color:#14141a;">
-        Welcome to OnBoostify — your account is verified and ready to go.
+        Welcome to Oyeboost — your account is verified and ready to go.
       </p>
       <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 4px;">
         <tr>
@@ -218,8 +218,8 @@ export async function sendWelcomeEmail(email: string, firstName?: string | null)
   await sendEmail({
     from: HELLO_FROM_EMAIL,
     to: email,
-    subject: "Welcome to OnBoostify",
+    subject: "Welcome to Oyeboost",
     html,
-    text: `${firstName ? `Hi ${firstName},` : "Hi,"}\n\nWelcome to OnBoostify — your account is verified and ready to go.\n\n${SITE_URL}/dashboard`,
+    text: `${firstName ? `Hi ${firstName},` : "Hi,"}\n\nWelcome to Oyeboost — your account is verified and ready to go.\n\n${SITE_URL}/dashboard`,
   });
 }

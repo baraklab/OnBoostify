@@ -4,7 +4,7 @@ import { siteConfig } from "@/lib/seo/config";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const title = (searchParams.get("title") ?? siteConfig.tagline).slice(0, 120);
+  const title = (searchParams.get("title") ?? `${siteConfig.name} — ${siteConfig.tagline}`).slice(0, 120);
   const eyebrow = (searchParams.get("eyebrow") ?? siteConfig.name).slice(0, 40);
 
   return new ImageResponse(
@@ -80,6 +80,9 @@ export async function GET(request: NextRequest) {
             {title}
           </span>
         </div>
+        <span style={{ fontSize: 22, color: "#6B6B66", letterSpacing: -0.2 }}>
+          {new URL(siteConfig.url).host}
+        </span>
       </div>
     ),
     {

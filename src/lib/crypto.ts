@@ -15,7 +15,7 @@ function getKey(): Buffer {
       "ENCRYPTION_SECRET is not set. Generate one with `openssl rand -hex 32` and add it to your environment.",
     );
   }
-  return scryptSync(secret, "onboostify-secret-store", 32);
+  return scryptSync(secret, "oyekool-secret-store", 32);
 }
 
 export function encryptSecret(plaintext: string): string {

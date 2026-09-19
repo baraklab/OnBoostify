@@ -24,7 +24,7 @@ export const linkedinProvider: PlatformProvider = {
       analytics: false,
     },
     limitations:
-      "LinkedIn access tokens expire after roughly 60 days and must be reconnected manually — LinkedIn does not grant refresh tokens outside its partner program. Publishing to company pages requires the page's admin to have approved OnBoostify in the LinkedIn Page admin settings. Post-level analytics are not exposed by LinkedIn's standard API tier.",
+      "LinkedIn access tokens expire after roughly 60 days and must be reconnected manually — LinkedIn does not grant refresh tokens outside its partner program. Publishing to company pages requires the page's admin to have approved Oyeboost in the LinkedIn Page admin settings. Post-level analytics are not exposed by LinkedIn's standard API tier.",
   },
 
   getOAuthUrl(state, redirectUri) {

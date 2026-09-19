@@ -5,7 +5,7 @@ import { pageMetadata } from "@/lib/seo/metadata";
 
 const title = "About";
 const description =
-  "OnBoostify was built because launching something well shouldn't mean rewriting the same update six times. Here's why, and how we think about the product.";
+  "Oyeboost was built because launching something well shouldn't mean rewriting the same update six times. Here's why, and how we think about the product.";
 
 export const metadata: Metadata = pageMetadata({
   title,
@@ -40,7 +40,7 @@ export default function AboutPage() {
               format it again for a newsletter. The ideas don&apos;t change. The busywork does.
             </p>
             <p>
-              OnBoostify exists to remove that busywork without removing your voice from the
+              Oyeboost exists to remove that busywork without removing your voice from the
               content. You write the source once. We adapt it for each platform&apos;s format and
               audience, you review and edit before anything goes out, and then it publishes to the
               accounts you choose.
@@ -52,7 +52,7 @@ export default function AboutPage() {
               without your say-so unless you turn that off yourself.
             </p>
             <p>
-              OnBoostify is built by a small team who ships in public. If you have feedback,{" "}
+              Oyeboost is built by a small team who ships in public. If you have feedback,{" "}
               <a href="/contact" className="font-medium text-foreground underline underline-offset-4">
                 tell us
               </a>

@@ -1,13 +1,13 @@
 export const faqs = [
   {
-    question: "Does OnBoostify post the exact same text everywhere?",
+    question: "Does Oyeboost post the exact same text everywhere?",
     answer:
       "No. Each destination gets a version rewritten for that platform's format and audience — a LinkedIn post reads differently from a Medium article or a Substack newsletter, even though they come from the same source.",
   },
   {
     question: "Can I use my own OpenAI or Anthropic API key?",
     answer:
-      "Yes. OnBoostify supports Bring Your Own Key for OpenAI, Anthropic, and OpenRouter. Your key is encrypted at rest and never sent to the browser.",
+      "Yes. Oyeboost supports Bring Your Own Key for OpenAI, Anthropic, and OpenRouter. Your key is encrypted at rest and never sent to the browser.",
   },
   {
     question: "Do I have to publish automatically?",

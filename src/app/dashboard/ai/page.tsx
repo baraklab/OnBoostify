@@ -27,7 +27,7 @@ export default async function AIOverviewPage() {
     <div className="flex flex-col gap-6">
       <PageHeader
         title="AI"
-        description="Bring your own key. OnBoostify never marks up AI usage."
+        description="Bring your own key. Oyeboost never marks up AI usage."
         action={
           <Button variant="outline" asChild>
             <Link href="/dashboard/settings/ai-providers">

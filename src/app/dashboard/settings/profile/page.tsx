@@ -19,7 +19,7 @@ export default async function ProfileSettingsPage() {
     <div>
       <h2 className="font-heading text-base font-semibold text-foreground">Profile</h2>
       <p className="mt-1 text-sm text-muted-foreground">
-        This is how you appear across OnBoostify.
+        This is how you appear across Oyeboost.
       </p>
       <div className="mt-6">
         <ProfileForm

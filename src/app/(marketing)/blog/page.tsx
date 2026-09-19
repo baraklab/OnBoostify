@@ -8,7 +8,7 @@ import { SplitCard } from "@/components/marketing/split-card";
 
 const title = "Blog";
 const description =
-  "Notes on cross-posting, AI-assisted content, backlinks, growth, and building OnBoostify.";
+  "Notes on cross-posting, AI-assisted content, backlinks, growth, and building Oyeboost.";
 
 export const metadata: Metadata = pageMetadata({
   title,

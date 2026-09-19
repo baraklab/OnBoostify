@@ -39,7 +39,6 @@ export const metadata: Metadata = pageMetadata({
   title: `${siteConfig.name} — ${siteConfig.tagline}`,
   description: siteConfig.description,
   path: "/",
-  image: "/og/home.png",
 });
 
 const useCases = [
@@ -159,7 +158,7 @@ export default function HomePage() {
           <SectionHeading
             eyebrow="Use cases"
             title="Get your launch in front of more eyes when it matters."
-            description="OnBoostify works anywhere you'd otherwise be manually rewriting the same update for every channel."
+            description="Oyeboost works anywhere you'd otherwise be manually rewriting the same update for every channel."
           />
           <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {useCases.map(({ icon: Icon, label }, index) => {
@@ -200,7 +199,7 @@ export default function HomePage() {
           <div>
             <p className="text-eyebrow">Auto cross-post, free</p>
             <h2 className="font-heading mt-3 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-              Publish once and let OnBoostify create platform-specific versions for the channels
+              Publish once and let Oyeboost create platform-specific versions for the channels
               you choose.
             </h2>
             <ul className="mt-6 flex flex-col gap-3 text-sm text-muted-foreground">
@@ -279,7 +278,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-6 py-16 text-center sm:py-20">
           <p className="text-eyebrow">Grow with our network</p>
           <h2 className="font-heading mx-auto mt-3 max-w-xl text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-            Tap into {siteConfig.stats.users} OnBoostify users and {siteConfig.stats.influencers}{" "}
+            Tap into {siteConfig.stats.users} Oyeboost users and {siteConfig.stats.influencers}{" "}
             influencers ready to amplify your launch.
           </h2>
           <Button variant="outline" className="mt-7" asChild>
@@ -298,7 +297,7 @@ export default function HomePage() {
             Your next launch deserves more than one post.
           </h2>
           <p className="mx-auto mt-3 max-w-lg text-[15px] text-white/80">
-            Connect an account, write it once, and let OnBoostify adapt it everywhere.
+            Connect an account, write it once, and let Oyeboost adapt it everywhere.
           </p>
           <Button size="lg" variant="accent" className="mt-7" asChild>
             <Link href="/login?mode=signup">

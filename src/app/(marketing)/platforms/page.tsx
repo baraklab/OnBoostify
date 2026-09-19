@@ -11,7 +11,7 @@ import type { ReactNode } from "react";
 export const metadata: Metadata = pageMetadata({
   title: "Platforms",
   description:
-    "Where OnBoostify publishes today — X, LinkedIn, Medium, Substack, and Dev.to — and what's coming next.",
+    "Where Oyeboost publishes today — X, LinkedIn, Medium, Substack, and Dev.to — and what's coming next.",
   path: "/platforms",
 });
 

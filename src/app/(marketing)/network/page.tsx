@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = pageMetadata({
   title: "Network",
-  description: `Discover influencers, creators, and communities in the OnBoostify network — ${siteConfig.stats.users} users and ${siteConfig.stats.influencers} influencers ready to amplify launches.`,
+  description: `Discover influencers, creators, and communities in the Oyeboost network — ${siteConfig.stats.users} users and ${siteConfig.stats.influencers} influencers ready to amplify launches.`,
   path: "/network",
 });
 
@@ -51,7 +51,7 @@ export default async function NetworkPage() {
             ready to amplify your launch.
           </h1>
           <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-muted-foreground">
-            The network is where OnBoostify users, creators, and communities discover each
+            The network is where Oyeboost users, creators, and communities discover each
             other&apos;s launches. It&apos;s early — today it&apos;s a directory. Over time it
             becomes a place to find people to amplify your launch, and launches worth amplifying.
           </p>

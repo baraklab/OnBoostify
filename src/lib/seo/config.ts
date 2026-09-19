@@ -1,12 +1,13 @@
 export const siteConfig = {
-  name: "OnBoostify",
+  name: "Oyeboost",
   tagline: "Marketing muscle for your products.",
   description:
-    "OnBoostify turns one post into platform-native content for X, LinkedIn, Medium, and Substack, and generates backlinks for every launch.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://onboostify.com",
-  ogImage: "/og/home.png",
+    "Oyeboost turns one post into platform-native content for X, LinkedIn, Medium, and Substack, and generates backlinks for every launch.",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://oyeboost.com",
+  locale: "en_US",
   twitterHandle: "@baraklabs",
   keywords: [
+    "Oyeboost",
     "product launch marketing",
     "cross-posting tool",
     "content repurposing",
@@ -15,6 +16,9 @@ export const siteConfig = {
     "backlink generation",
     "X to LinkedIn",
     "content distribution",
+    "publish once, post everywhere",
+    "AI content repurposing",
+    "bring your own AI key",
   ],
   company: "Baraklabs",
   contactEmail: "info@baraklabs.com",

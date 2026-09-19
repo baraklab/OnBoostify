@@ -26,7 +26,7 @@ export const mediumProvider: PlatformProvider = {
       analytics: false,
     },
     limitations:
-      "Medium no longer issues new integration tokens to accounts created after 2023 — if your account doesn't already have one, publishing isn't available and OnBoostify falls back to a formatted export you paste into Medium's editor yourself. Medium's API has no scheduling or analytics endpoints.",
+      "Medium no longer issues new integration tokens to accounts created after 2023 — if your account doesn't already have one, publishing isn't available and Oyeboost falls back to a formatted export you paste into Medium's editor yourself. Medium's API has no scheduling or analytics endpoints.",
   },
 
   async publishPost(accessToken, input: PublishInput): Promise<PublishResult> {

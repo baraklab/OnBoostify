@@ -18,7 +18,7 @@ export const FEATURE_LIST: FeatureItem[] = [
     slug: "content-transformation-engine",
     title: "Content transformation engine",
     description:
-      "Write once. OnBoostify rewrites it into a platform-native version for each destination — a LinkedIn post, a Medium article with headings, or a Substack newsletter — without just copy-pasting the same text.",
+      "Write once. Oyeboost rewrites it into a platform-native version for each destination — a LinkedIn post, a Medium article with headings, or a Substack newsletter — without just copy-pasting the same text.",
     color: "#4f46e5",
     thumbnail: "/images/features/content-transformation-engine/one-idea-many-platforms-og.png",
     body: [
@@ -57,7 +57,7 @@ export const FEATURE_LIST: FeatureItem[] = [
     color: "#0284c7",
     thumbnail: "/images/features/content-profiles/a-profile-your-voice-everywhere-og.png",
     body: [
-      "A content profile is a saved configuration — tone, audience, brand voice, formality, preferred CTA style, and specific words or topics to avoid — that gets applied automatically whenever OnBoostify generates a post on your behalf.",
+      "A content profile is a saved configuration — tone, audience, brand voice, formality, preferred CTA style, and specific words or topics to avoid — that gets applied automatically whenever Oyeboost generates a post on your behalf.",
       "Instead of re-explaining your voice to the AI every time you write, you set it up once in Settings → Content Preferences and pick which profile to use per post or per workflow. You can save more than one profile if you write in different voices for different accounts.",
       "This is also where the words-to-avoid and topics-to-avoid lists live, so generated content stays on-brand without you having to catch it in every review.",
     ],
@@ -92,7 +92,7 @@ export const FEATURE_LIST: FeatureItem[] = [
     color: "#d97706",
     thumbnail: "/images/features/bring-your-own-ai-key/use-your-own-ai-key-og.png",
     body: [
-      "OnBoostify doesn't resell AI tokens. You connect your own OpenAI, Anthropic, or OpenRouter API key under Settings → AI Providers, choose a default model, and every generation in the product runs on that key directly.",
+      "Oyeboost doesn't resell AI tokens. You connect your own OpenAI, Anthropic, or OpenRouter API key under Settings → AI Providers, choose a default model, and every generation in the product runs on that key directly.",
       "Keys are encrypted with AES-256-GCM before they're stored, and are only decrypted server-side at the moment a request needs to be made — the raw key is never sent back to your browser. Settings only ever shows a masked version.",
       "You can test a connection before saving it, switch providers or models at any time, and mark one provider as the default that new workflows pick up automatically.",
     ],
@@ -128,7 +128,7 @@ export const FEATURE_LIST: FeatureItem[] = [
     thumbnail: "/images/features/multiple-accounts-per-platform/manage-multiple-accounts-og.png",
     body: [
       "Most people running a launch aren't posting from a single account. You might have a personal X account and a product account, a personal LinkedIn profile and a company page, or more than one Medium publication.",
-      "OnBoostify's account model is built around this from the ground up: connect as many accounts per platform as you need, and pick the exact source and destination account when you create a post or set up a workflow — nothing assumes you only have one.",
+      "Oyeboost's account model is built around this from the ground up: connect as many accounts per platform as you need, and pick the exact source and destination account when you create a post or set up a workflow — nothing assumes you only have one.",
       "Each connected account shows its own connection status, last sync time, and a reconnect flow if a token expires, so you always know which accounts are actually ready to publish to.",
     ],
     faq: [

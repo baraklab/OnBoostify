@@ -27,7 +27,7 @@ export function Logo({
           isLarge ? "text-[28px] font-bold" : "text-[15px]",
         )}
       >
-        OnBoostify
+        Oyeboost
       </span>
     </Link>
   );

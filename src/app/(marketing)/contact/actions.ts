@@ -31,7 +31,7 @@ export async function submitContactForm(
   }
 
   await notifyTelegram(
-    `📬 New OnBoostify contact message\n\n👤 ${parsed.data.name}\n📧 ${parsed.data.email}\n\n💬 ${parsed.data.message}`,
+    `📬 New Oyeboost contact message\n\n👤 ${parsed.data.name}\n📧 ${parsed.data.email}\n\n💬 ${parsed.data.message}`,
   );
 
   return { status: "success" };

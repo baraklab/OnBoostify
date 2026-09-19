@@ -35,7 +35,7 @@ export default async function AIProvidersPage() {
     <div>
       <h2 className="font-heading text-base font-semibold text-foreground">AI providers</h2>
       <p className="mt-1 text-sm text-muted-foreground">
-        Bring your own key. OnBoostify never marks up AI usage — you connect OpenAI, Anthropic, or
+        Bring your own key. Oyeboost never marks up AI usage — you connect OpenAI, Anthropic, or
         OpenRouter directly and pay that provider at their rates.
       </p>
 
